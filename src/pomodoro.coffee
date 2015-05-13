@@ -31,6 +31,10 @@ class Pomodoro
     console.log name
     @_setTimer('work')
 
+  stop: ->
+    @timer.stop()
+    console.log new Date
+
   shortBreak: ->
     @_setTimer('shortBreak')
 

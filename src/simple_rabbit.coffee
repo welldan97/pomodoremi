@@ -32,4 +32,7 @@ class SimpleRabbit
       @subPromise.then =>
         @context.close()
 
+  reader: (object) ->
+    @read (data) -> object[data.method](data.args...)
+
 module.exports = SimpleRabbit

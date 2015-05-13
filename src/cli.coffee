@@ -1,17 +1,22 @@
 meow = require 'meow'
 pkg = require '../package.json'
+SimpleRabbit = require './simple_rabbit'
+Pomodoro = require './pomodoro'
 
-Router = require './router'
-
+simpleRabbit = new SimpleRabbit()
+pomodoro = new Pomodoro()
 cli = meow
   help: false
   pkg: pkg
 
-router = new Router()
-
 subCommand = cli.input[1] ? 2
 
-if subCommand
-  router[cli.input[0]](subCommand, cli.flags)
+args = if subCommand
+  [subCommand, cli.flags]
 else
-  router[cli.input[0]](cli.flags)
+  [cli.flags]
+
+if cli.input[0] == 'server'
+  simpleRabbit.reader(pomodoro)
+else
+  simpleRabbit.write(method: cli.input[0], args: args)
