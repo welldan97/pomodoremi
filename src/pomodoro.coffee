@@ -1,6 +1,9 @@
+_ = require 'lodash'
+ProgressBar = require 'progress'
+notifier = require 'node-notifier'
+
 Utils = require './utils'
 Timer = require './timer'
-ProgressBar = require 'progress'
 
 class Pomodoro
   DEFAULT_OPTIONS =
@@ -8,35 +11,61 @@ class Pomodoro
     shortBreakLength: 5
     longBreakLength: 15
 
-  constructor: ({ @workLength, @shortBreak, @longBreak } = DEFAULT_OPTIONS) ->
+    messages:
+      afterWork: 'Take a Break, Darling'
+      afterBreak: 'Please, go to work'
+
+  constructor: (options = DEFAULT_OPTIONS) ->
+    _.merge(this, DEFAULT_OPTIONS, options)
     @timer = new Timer()
     @progressBarOptions = [':bar :status',
+      clear: true
       complete: "█"
       incomplete: "░"
       width: 25
       total: 100
     ]
 
-  start: (name = 'Pomodoro', args...) ->
-    @progressBar = new ProgressBar @progressBarOptions...
-
+  start: (name = 'Pomodoro') ->
     console.log new Date
     console.log name
+    @_setTimer('work')
 
-    @timer.start Utils.toMs(@workLength)
-    console.log @workLength
+  shortBreak: ->
+    @_setTimer('shortBreak')
+
+  longBreak: ->
+    @_setTimer('longBreak')
+
+  _setTimer: (type) ->
+    message =  (type) =>
+      switch type
+        when 'shortBreak'
+          @messages['break']
+        when 'longBreak'
+          @messages['break']
+        when 'work'
+          @messages['work']
+
+    @progressBar = new ProgressBar @progressBarOptions...
+
+    @progressBar.update 0, status: 0
+
+    @timer.start Utils.toMs(this["#{type}Length"])
 
     @timer.notify (passed) =>
-      passedInMins = @workLength * (passed / Utils.toMs(@workLength))
-      status = @workLength - Math.floor(passedInMins)
-      @progressBar.update passed / Utils.toMs(@workLength), { status }
+      passedInMins = this["#{type}Length"] * (passed / Utils.toMs(this["#{type}Length"]))
+      status = this["#{type}Length"] - Math.floor(passedInMins)
+      @progressBar.update passed / Utils.toMs(this["#{type}Length"]), { status }
 
-    @timer.finish (d) =>
-      @progressBar.update 1, status: 0
-      console.log new Date
+    @timer.finish =>
+      @progressBar.update 1, { status: 0 }
       console.log '\n'
+      notifier.notify title: '🍅', message: message(type)
 
     @timer.overstay (d) ->
-      console.log "Overstay: #{Utils.toMin(d)}"
+      overstayInMins = Utils.toMin(d)
+      console.log "Overstayed: #{overstayInMins}"
+      notifier.notify title: '🍅', message: "Overstayed: #{overstayInMins}"
 
 module.exports = Pomodoro

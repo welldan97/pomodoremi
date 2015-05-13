@@ -6,14 +6,14 @@ class Timer
 
   start: (@length) ->
     @processed = 0
-    @stopped = false
+    @started = true
     setTimeout (=> @process()), @delay
 
   stop: ->
-    @stopped = true
+    @started = false
 
   process: ->
-    return if @stopped
+    return unless @started
     @processed += 1
     if (@processed - 1) * @delay >= @length
       @onOverstay? @processed * @delay - @length
