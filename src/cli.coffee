@@ -1,17 +1,17 @@
 meow = require 'meow'
 pkg = require '../package.json'
 
-Pomodoro = require './pomodoro'
+Router = require './router'
 
 cli = meow
   help: false
   pkg: pkg
 
-pomodoro = new Pomodoro()
+router = new Router()
 
 subCommand = cli.input[1] ? 2
 
 if subCommand
-  pomodoro[cli.input[0]](subCommand, cli.flags)
+  router[cli.input[0]](subCommand, cli.flags)
 else
-  pomodoro[cli.input[0]](cli.flags)
+  router[cli.input[0]](cli.flags)
