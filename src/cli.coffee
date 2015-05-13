@@ -1,3 +1,4 @@
+_ = require 'lodash'
 meow = require 'meow'
 pkg = require '../package.json'
 SimpleRabbit = require './simple_rabbit'
@@ -9,14 +10,15 @@ cli = meow
   help: false
   pkg: pkg
 
-subCommand = cli.input[1] ? 2
-
-args = if subCommand
-  [subCommand, cli.flags]
+subCommands = cli.input.slice(1, cli.input.length)
+flags = if _.isEmpty(cli.flags)
+  []
 else
-  [cli.flags]
+  cli.flags
+
+args = subCommands.concat flags
 
 if cli.input[0] == 'server'
   simpleRabbit.reader(pomodoro)
 else
-  simpleRabbit.write(method: cli.input[0], args: args)
+  simpleRabbit.invoke cli.input[0], args...

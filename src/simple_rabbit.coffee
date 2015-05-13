@@ -35,4 +35,6 @@ class SimpleRabbit
   reader: (object) ->
     @read (data) -> object[data.method](data.args...)
 
+  invoke: (method, args...) ->
+    @write(method: method, args: args)
 module.exports = SimpleRabbit
