@@ -53,7 +53,7 @@ class Pomodoro
 
     @progressBar = new ProgressBar @progressBarOptions...
 
-    @progressBar.update 0, status: 0
+    @progressBar.update 0, status: this["#{type}Length"]
 
     @timer.start Utils.toMs(this["#{type}Length"])
 
