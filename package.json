@@ -19,6 +19,7 @@
     "commander": "^2.8.1",
     "keypress": "^0.2.1",
     "lodash": "^3.8.0",
+    "moment": "^2.10.3",
     "node-notifier": "^4.2.1",
     "progress": "^1.1.8",
     "q": "^1.4.0",

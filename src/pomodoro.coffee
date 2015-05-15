@@ -41,7 +41,6 @@ class Pomodoro
 
   constructor: (options = {}) ->
     _.merge(this, DEFAULT_OPTIONS, config, options)
-    @timer = new Timer()
     @progressBarOptions = [':bar :status',
       clear: true
       complete: "█"
@@ -49,25 +48,30 @@ class Pomodoro
       width: 25
       total: 100
     ]
+    @timer = new Timer()
 
   start: (@name = 'Pomodoro') ->
-    console.log new Date
+    console.log("(#{Utils.formatDate(new Date)})") unless @type?
+
     console.log @name
+    @resetTimer()
     @startTimer('work')
 
   stop: ->
-    @stopTimer()
-    console.log new Date
+    @resetTimer()
+    console.log("(#{Utils.formatDate(new Date)})\n") unless @type?
 
   shortBreak: ->
+    @resetTimer()
+    console.log '----'
     @startTimer('shortBreak')
 
   longBreak: ->
+    @resetTimer()
+    console.log '===='
     @startTimer('longBreak')
 
   startTimer: (type) ->
-    @stopTimer()
-
     @type = type
     @startTime = new Date
 
@@ -98,21 +102,21 @@ class Pomodoro
     @timer.finish =>
       this["onFinish#{typeUppercase}"]()
       @progressBar.update 1, { status: 0 }
-      console.log '\n'
+      @progressBar = undefined
       notifier.notify title: '🍅', message: message(type)
 
     @timer.overstay (delay) =>
       this["onOverstay#{typeUppercase}"](delay)
       overstayInMins = Utils.toMin(delay)
-      console.log "Overstayed: #{overstayInMins}"
       notifier.notify title: '🍅', message: "Overstayed: #{overstayInMins}"
 
-  stopTimer: ->
+  resetTimer: ->
+    @progressBar.update 1, { status: 0 } if @progressBar
     if @type?
       @stopTime = new Date
       typeUppercase = s(@type).capitalize().value()
       this["onStop#{typeUppercase}"]()
     @type = null
     @timer.stop()
-
+    @timer = new Timer()
 module.exports = Pomodoro
