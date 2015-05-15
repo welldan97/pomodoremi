@@ -20,15 +20,20 @@ class Pomodoro
     onNotifyWork: ->
     onFinishWork: ->
     onOverstayWork: ->
+    onStopWork: ->
+
     onStartShortBreak: ->
     onNotifyShortBreak: ->
     onFinishShortBreak: ->
     onOverstayShortBreak: ->
+    onStopShortBreak: ->
+
     onStartLongBreak: ->
     onNotifyLongBreak: ->
     onFinishLongBreak: ->
     onOverstayLongBreak: ->
-    onStop: ->
+    onStopLongBreak: ->
+
 
     messages:
       afterWork: 'Take a Break, Darling'
@@ -45,23 +50,27 @@ class Pomodoro
       total: 100
     ]
 
-  start: (name = 'Pomodoro') ->
-    @name = name
+  start: (@name = 'Pomodoro') ->
     console.log new Date
-    console.log name
-    @_setTimer('work')
+    console.log @name
+    @startTimer('work')
 
   stop: ->
-    @timer.stop()
+    @stopTimer()
     console.log new Date
 
   shortBreak: ->
-    @_setTimer('shortBreak')
+    @startTimer('shortBreak')
 
   longBreak: ->
-    @_setTimer('longBreak')
+    @startTimer('longBreak')
 
-  _setTimer: (type) ->
+  startTimer: (type) ->
+    @stopTimer()
+
+    @type = type
+    @startTime = new Date
+
     message =  (type) =>
       switch type
         when 'shortBreak'
@@ -97,5 +106,13 @@ class Pomodoro
       overstayInMins = Utils.toMin(delay)
       console.log "Overstayed: #{overstayInMins}"
       notifier.notify title: '🍅', message: "Overstayed: #{overstayInMins}"
+
+  stopTimer: ->
+    if @type?
+      @stopTime = new Date
+      typeUppercase = s(@type).capitalize().value()
+      this["onStop#{typeUppercase}"]()
+    @type = null
+    @timer.stop()
 
 module.exports = Pomodoro
