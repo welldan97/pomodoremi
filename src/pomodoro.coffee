@@ -71,6 +71,10 @@ class Pomodoro
     console.log '===='
     @startTimer('longBreak')
 
+  tag: (tag) ->
+    return unless tag?
+    @tags.push tag
+
   startTimer: (type) ->
     @type = type
     @startTime = new Date
@@ -112,6 +116,8 @@ class Pomodoro
 
   resetTimer: ->
     @progressBar.update 1, { status: 0 } if @progressBar
+    console.log "  \##{@tags.join(' #')}" unless _.isEmpty @tags
+    @tags = []
     if @type?
       @stopTime = new Date
       typeUppercase = s(@type).capitalize().value()
