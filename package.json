@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "",
   "bin": {
-    "pomodoro": "./bin/pomodoro.js"
+    "pomodoro": "./lib/cli.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,17 +11,20 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "coffee-script": "^1.9.2",
-    "meow": "^3.1.0",
-    "rabbit.js": "^0.4.2"
+    "gulp": "^3.8.11",
+    "gulp-coffee": "^2.3.1",
+    "gulp-insert": "^0.4.0"
   },
   "dependencies": {
+    "coffee-script": "^1.9.2",
     "commander": "^2.8.1",
     "keypress": "^0.2.1",
     "lodash": "^3.8.0",
+    "meow": "^3.1.0",
     "moment": "^2.10.3",
     "node-notifier": "^4.2.1",
     "progress": "^1.1.8",
+    "rabbit.js": "^0.4.2",
     "q": "^1.4.0",
     "underscore.string": "^3.0.3"
   }

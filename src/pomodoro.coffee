@@ -1,7 +1,8 @@
-CONFIG_PATH = "#{process.env.HOME}/.pomodoro/config.coffee"
+CONFIG_PATH = "#{process.env.HOME}/.pomodoro/config"
 
 _ = require 'lodash'
 s = require 'underscore.string'
+require 'coffee-script/register'
 
 ProgressBar = require 'progress'
 notifier = require 'node-notifier'
