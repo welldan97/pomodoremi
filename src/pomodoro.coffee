@@ -38,7 +38,8 @@ class Pomodoro
 
     messages:
       afterWork: 'Take a Break, Darling'
-      afterBreak: 'Please, go to work'
+      afterShortBreak: 'Please, go to work'
+      afterLongBreak: 'Please, go to work'
 
   constructor: (options = {}) ->
     _.merge(this, DEFAULT_OPTIONS, config, options)
@@ -80,14 +81,6 @@ class Pomodoro
     @type = type
     @startTime = new Date
 
-    message =  (type) =>
-      switch type
-        when 'shortBreak'
-          @messages['break']
-        when 'longBreak'
-          @messages['break']
-        when 'work'
-          @messages['work']
     typeUppercase = s(type).capitalize().value()
 
     @progressBar = new ProgressBar @progressBarOptions...
@@ -108,7 +101,7 @@ class Pomodoro
       this["onFinish#{typeUppercase}"]()
       @progressBar.update 1, { status: 0 }
       @progressBar = undefined
-      notifier.notify title: '🍅', message: message(type)
+      notifier.notify title: '🍅', message: @messages["after#{typeUppercase}"]
 
     @timer.overstay (delay) =>
       this["onOverstay#{typeUppercase}"](delay)
@@ -126,4 +119,5 @@ class Pomodoro
     @type = null
     @timer.stop()
     @timer = new Timer()
+
 module.exports = Pomodoro
