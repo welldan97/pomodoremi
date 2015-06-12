@@ -1,4 +1,4 @@
-CONFIG_PATH = "#{process.env.HOME}/.pomodoro/config"
+CONFIG_PATH = "#{process.env.HOME}/.pomodoremi/config"
 
 _ = require 'lodash'
 s = require 'underscore.string'
@@ -11,7 +11,7 @@ Utils = require './utils'
 Timer = require './timer'
 config = require CONFIG_PATH
 
-class Pomodoro
+class Pomodoremi
   DEFAULT_OPTIONS =
     workLength: 25
     shortBreakLength: 5
@@ -120,4 +120,4 @@ class Pomodoro
     @timer.stop()
     @timer = new Timer()
 
-module.exports = Pomodoro
+module.exports = Pomodoremi
