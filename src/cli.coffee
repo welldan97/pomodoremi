@@ -1,7 +1,7 @@
 _ = require 'lodash'
 meow = require 'meow'
 pkg = require '../package.json'
-SimpleRabbit = require './simple_rabbit'
+SimpleRabbit = require 'simple-rabbit'
 Pomodoro = require './pomodoro'
 
 simpleRabbit = new SimpleRabbit()
