@@ -1,5 +1,8 @@
 _ = require 'lodash'
 class Tags
+  help:
+    tag: -> ['tag <tag>', 'add tag']
+    tags: -> ['tags', 'list tags']
   commands:
     tag: (tag, cb) ->
       return unless tag?

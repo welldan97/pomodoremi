@@ -15,6 +15,12 @@ config = require CONFIG_PATH
 
 class Pomodoremi
   DEFAULT_OPTIONS =
+    help:
+      start: -> ['start [name]', 'starts Pomodoro']
+      shortBreak: -> ['shortBreak', 'starts short break']
+      longBreak: -> ['longBreak', 'starts long break']
+      stop: -> ['stop', 'stops Pomodoro or break']
+
     lengths:
       work: Utils.toMs(25)
       shortBreak: Utils.toMs(5)
@@ -31,8 +37,9 @@ class Pomodoremi
     _.merge(this, DEFAULT_OPTIONS, config, options)
     _.merge(Interval, lengths: @lengths)
     commandsList = _(@modules).pluck('commands').compact().value()
-    _.forEach commandsList, (commands) =>
-      _.merge(this, commands)
+    _.forEach commandsList, (commands) => _.merge(this, commands)
+    helpList = _(@modules).pluck('help').compact().value()
+    _.forEach helpList, (help) => _.merge(@help, help)
     @timer = new Timer()
 
     _.forEach ['start', 'stop', 'update', 'finish', 'overstay'], (event) =>
