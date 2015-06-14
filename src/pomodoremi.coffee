@@ -5,6 +5,7 @@ s = require 'underscore.string'
 require 'coffee-script/register'
 
 Tags = require './modules/tags'
+Track = require './modules/track'
 CommandLineLog = require './modules/command-line-log'
 Notifier = require './modules/notifier'
 
@@ -27,18 +28,20 @@ class Pomodoremi
     @modules.push new CommandLineLog
     @modules.push new Notifier
     @modules.push new Tags
+    @modules.push new Track
     _.merge(this, @modules[2].commands)
 
     @timer = new Timer()
 
     @timer.onStart =>
-      @startTime = new Date
-      @tags = []
       @modules[0].start(@interval, ->)
+      @modules[2].start(@interval, ->)
+      @modules[3].start(@interval, ->)
 
     @timer.onStop =>
-      @stopTime = new Date
+      @interval.stopTime = new Date
       @modules[0].stop(@interval, ->)
+      @modules[3].stop(@interval, ->)
 
     @timer.onUpdate (passed) =>
       @modules[0].update(@interval, passed, ->)
