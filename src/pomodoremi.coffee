@@ -4,8 +4,7 @@ _ = require 'lodash'
 s = require 'underscore.string'
 require 'coffee-script/register'
 
-# ProgressBar = require 'progress'
-ProgressBar = require './middleware/progress-bar'
+CommandLineLog = require './middleware/command-line-log'
 Notifier = require './middleware/notifier'
 
 Utils = require './utils'
@@ -39,14 +38,11 @@ class Pomodoremi
   constructor: (options = {}) ->
     _.merge(this, DEFAULT_OPTIONS, config, options)
     @middlewares = []
-    @middlewares.push new ProgressBar
+    @middlewares.push new CommandLineLog
     @middlewares.push new Notifier
     @timer = new Timer()
 
   start: (@name = 'Pomodoro') ->
-    console.log("(#{Utils.formatDate(new Date)})") unless @type?
-
-    console.log @name
     @resetTimer()
     @startTimer('work')
 
@@ -56,25 +52,23 @@ class Pomodoremi
 
   shortBreak: ->
     @resetTimer()
-    console.log '----'
     @startTimer('shortBreak')
 
   longBreak: ->
     @resetTimer()
-    console.log '===='
     @startTimer('longBreak')
 
   tag: (tag) ->
     return unless tag?
     @tags.push tag
 
-  startTimer: (type) ->
+  startTimer: (type, name) ->
     @type = type
     @startTime = new Date
 
     typeUppercase = s(type).capitalize().value()
 
-    @middlewares[0].start(type, this["#{type}Length"], ->)
+    @middlewares[0].start(type, @name, this["#{type}Length"], ->)
 
     @timer.start Utils.toMs(this["#{type}Length"])
 
@@ -95,7 +89,6 @@ class Pomodoremi
 
   resetTimer: ->
     @middlewares[0].reset(->)
-    # console.log "  \##{@tags.join(' #')}" unless _.isEmpty @tags
     @tags = []
     if @type?
       @stopTime = new Date

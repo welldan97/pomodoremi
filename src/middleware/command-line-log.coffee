@@ -1,7 +1,7 @@
 Utils = require '../utils'
 Progress = require 'progress'
 
-class ProgressBar
+class CommandLineLog
   DEFAULT_OPTIONS = [':bar :status',
       clear: true
       complete: "█"
@@ -12,7 +12,17 @@ class ProgressBar
 
   constructor: (@options = DEFAULT_OPTIONS) ->
 
-  start: (type, @length, cb) ->
+  start: (type, name, @length, cb) ->
+    switch type
+      when 'work'
+        # console.log("(#{Utils.formatDate(new Date)})") unless @type?
+        console.log name
+      when 'shortBreak'
+        console.log '----'
+      when 'longBreak'
+        console.log '===='
+
+
     @progress = new Progress @options...
     @progress.update 0, status: @length
     cb()
@@ -30,6 +40,7 @@ class ProgressBar
 
   reset: (cb) ->
     @progress.update 1, { status: 0 } if @progress
+    # console.log "  \##{@tags.join(' #')}" unless _.isEmpty @tags
     cb()
 
-module.exports = ProgressBar
+module.exports = CommandLineLog
