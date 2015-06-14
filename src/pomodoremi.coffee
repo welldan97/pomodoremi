@@ -5,7 +5,7 @@ require 'coffee-script/register'
 
 Tags = require './modules/tags'
 Track = require './modules/track'
-CommandLineLog = require './modules/command-line-log'
+CommandLineUI = require './modules/command-line-ui'
 Notifier = require './modules/notifier'
 
 Utils = require './utils'
@@ -23,7 +23,7 @@ class Pomodoremi
     modules: [
       new Track
       new Tags
-      new CommandLineLog
+      new CommandLineUI
       new Notifier
     ]
 

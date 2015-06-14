@@ -1,7 +1,7 @@
 Utils = require '../utils'
 Progress = require 'progress'
 
-class CommandLineLog
+class CommandLineUI
   DEFAULT_OPTIONS = [':bar :status',
       clear: true
       complete: "█"
@@ -44,4 +44,4 @@ class CommandLineLog
     # console.log("(#{Utils.formatDate(new Date)})\n") unless @type?
     cb()
 
-module.exports = CommandLineLog
+module.exports = CommandLineUI
