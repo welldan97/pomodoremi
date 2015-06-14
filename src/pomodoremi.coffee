@@ -17,24 +17,6 @@ class Pomodoremi
     shortBreakLength: 5
     longBreakLength: 15
 
-    onStartWork: ->
-    onNotifyWork: ->
-    onFinishWork: ->
-    onOverstayWork: ->
-    onStopWork: ->
-
-    onStartShortBreak: ->
-    onNotifyShortBreak: ->
-    onFinishShortBreak: ->
-    onOverstayShortBreak: ->
-    onStopShortBreak: ->
-
-    onStartLongBreak: ->
-    onNotifyLongBreak: ->
-    onFinishLongBreak: ->
-    onOverstayLongBreak: ->
-    onStopLongBreak: ->
-
   constructor: (options = {}) ->
     _.merge(this, DEFAULT_OPTIONS, config, options)
     @middlewares = []
@@ -72,19 +54,14 @@ class Pomodoremi
 
     @timer.start Utils.toMs(this["#{type}Length"])
 
-    this["onStart#{typeUppercase}"]()
-
     @timer.notify (passed) =>
-      this["onNotify#{typeUppercase}"](passed)
       @middlewares[0].notify(type, passed, ->)
 
     @timer.finish =>
-      this["onFinish#{typeUppercase}"]()
       @middlewares[0].finish(type, ->)
       @middlewares[1].finish(type, ->)
 
     @timer.overstay (delay) =>
-      this["onOverstay#{typeUppercase}"](delay)
       @middlewares[1].overstay(type, delay, ->)
 
   resetTimer: ->
@@ -93,7 +70,6 @@ class Pomodoremi
     if @type?
       @stopTime = new Date
       typeUppercase = s(@type).capitalize().value()
-      this["onStop#{typeUppercase}"]()
     @type = null
     @timer.stop()
     @timer = new Timer()
