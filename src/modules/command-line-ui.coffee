@@ -1,3 +1,4 @@
+_ = require 'lodash'
 Utils = require '../utils'
 Progress = require 'progress'
 
@@ -11,13 +12,17 @@ class CommandLineUI
     ]
 
   constructor: (@options = DEFAULT_OPTIONS) ->
+    @isSessionStarted = false
+    @isSessionClosing = false
 
   start: (interval, cb) ->
+    console.log("(#{Utils.formatDate(new Date)})") unless @isSessionStarted
+    @isSessionStarted = true
+    @isSessionClosing = false
     @length = interval.length
     switch interval.type
       when 'work'
         console.log interval.name
-        # console.log("(#{Utils.formatDate(new Date)})") unless @type?
       when 'shortBreak'
         console.log '----'
       when 'longBreak'
@@ -39,9 +44,16 @@ class CommandLineUI
     cb()
 
   stop: (interval, delay, cb) ->
+    @isSessionClosing = true
     @progress.update 1, { status: 0 } if @progress
-    # console.log "  \##{@tags.join(' #')}" unless _.isEmpty @tags
-    # console.log("(#{Utils.formatDate(new Date)})\n") unless @type?
+    console.log "  \##{interval.tags.join(' #')}" unless _.isEmpty interval.tags
+    setTimeout (=> @_closeSession()), 10000
     cb()
+
+  _closeSession: ->
+    if @isSessionClosing
+      @isSessionClosing = false
+      @isSessionStarted = false
+      console.log("(#{Utils.formatDate(new Date)})\n")
 
 module.exports = CommandLineUI
