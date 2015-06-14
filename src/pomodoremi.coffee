@@ -1,8 +1,6 @@
 CONFIG_PATH = "#{process.env.HOME}/.pomodoremi/config"
 
 _ = require 'lodash'
-s = require 'underscore.string'
-async = require 'async'
 require 'coffee-script/register'
 
 Tags = require './modules/tags'
