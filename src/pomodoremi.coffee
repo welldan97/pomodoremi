@@ -71,6 +71,5 @@ class Pomodoremi
       typeUppercase = s(@type).capitalize().value()
     @type = null
     @timer.stop()
-    @timer = new Timer()
 
 module.exports = Pomodoremi
