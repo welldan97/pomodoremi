@@ -6,7 +6,7 @@ require 'coffee-script/register'
 
 # ProgressBar = require 'progress'
 ProgressBar = require './middleware/progress-bar'
-notifier = require 'node-notifier'
+Notifier = require './middleware/notifier'
 
 Utils = require './utils'
 Timer = require './timer'
@@ -36,16 +36,11 @@ class Pomodoremi
     onOverstayLongBreak: ->
     onStopLongBreak: ->
 
-
-    messages:
-      afterWork: 'Take a Break, Darling'
-      afterShortBreak: 'Please, go to work'
-      afterLongBreak: 'Please, go to work'
-
   constructor: (options = {}) ->
     _.merge(this, DEFAULT_OPTIONS, config, options)
     @middlewares = []
     @middlewares.push new ProgressBar
+    @middlewares.push new Notifier
     @timer = new Timer()
 
   start: (@name = 'Pomodoro') ->
@@ -92,16 +87,15 @@ class Pomodoremi
     @timer.finish =>
       this["onFinish#{typeUppercase}"]()
       @middlewares[0].finish(type, ->)
-      notifier.notify title: '🍅', message: @messages["after#{typeUppercase}"]
+      @middlewares[1].finish(type, ->)
 
     @timer.overstay (delay) =>
       this["onOverstay#{typeUppercase}"](delay)
-      overstayInMins = Utils.toMin(delay)
-      notifier.notify title: '🍅', message: "Overstayed: #{overstayInMins}"
+      @middlewares[1].overstay(type, delay, ->)
 
   resetTimer: ->
     @middlewares[0].reset(->)
-    console.log "  \##{@tags.join(' #')}" unless _.isEmpty @tags
+    # console.log "  \##{@tags.join(' #')}" unless _.isEmpty @tags
     @tags = []
     if @type?
       @stopTime = new Date
