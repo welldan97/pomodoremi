@@ -2,7 +2,7 @@ class Tags
   commands:
     tag: (tag) ->
       return unless tag?
-      @tags.push tag
+      @interval.tags.push tag
 
   start: (interval, cb) ->
     interval.tags = []
