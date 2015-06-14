@@ -53,8 +53,8 @@ class Pomodoremi
 
     @timer.start Utils.toMs(this["#{type}Length"])
 
-    @timer.notify (passed) =>
-      @middlewares[0].notify(type, passed, ->)
+    @timer.update (passed) =>
+      @middlewares[0].update(type, passed, ->)
 
     @timer.finish =>
       @middlewares[0].finish(type, ->)

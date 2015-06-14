@@ -20,10 +20,10 @@ class Timer
     else if @processed * @delay >= @length
       @onFinish?()
     else
-      @onNotify? @processed * @delay
+      @onUpdate? @processed * @delay
     setTimeout (=> @process()), @delay
 
-  notify: (@onNotify) ->
+  update: (@onUpdate) ->
   overstay: (@onOverstay) ->
   finish: (@onFinish) ->
 

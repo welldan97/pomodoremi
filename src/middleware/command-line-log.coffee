@@ -27,7 +27,7 @@ class CommandLineLog
     @progress.update 0, status: @length
     cb()
 
-  notify: (type, passed, cb) ->
+  update: (type, passed, cb) ->
     passedInMins = @length * (passed / Utils.toMs(@length))
     status = @length - Math.floor(passedInMins)
     @progress.update passed / Utils.toMs(@length), { status }
