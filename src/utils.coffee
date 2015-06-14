@@ -2,7 +2,6 @@ async = require 'async'
 _ = require 'lodash'
 
 ONE_MIN_IN_MS = 60 * 1000
-ONE_MIN_IN_MS = 300
 
 moment = require 'moment'
 
