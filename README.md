@@ -2,9 +2,6 @@
 
 ## Installation
 
-Make sure [RabbitMQ](http://www.rabbitmq.com/) server is up and
-running.
-
 ```shell
 npm install pomodoremi --global
 ```
@@ -15,7 +12,7 @@ npm install pomodoremi --global
 pomodoremi server
 
 pomodoremi start
-pomodoremi start Test
+pomodoremi start RefactoringTask
 pomodoremi shortBreak
 pomodoremi longBreak
 pomodoremi stop

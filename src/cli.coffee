@@ -1,10 +1,12 @@
+PORT = 7387
+
 _ = require 'lodash'
 meow = require 'meow'
+dnode = require 'dnode'
+
 pkg = require '../package.json'
-SimpleRabbit = require 'simple-rabbit'
 Pomodoremi = require './pomodoremi'
 
-simpleRabbit = new SimpleRabbit()
 pomodoremi = new Pomodoremi()
 cli = meow
   help: false
@@ -19,6 +21,13 @@ else
 args = subCommands.concat flags
 
 if cli.input[0] == 'server'
-  simpleRabbit.reader(pomodoremi)
+  bridge = method:
+    (name, args..., cb) ->
+      pomodoremi[name](args..., cb)
+  dnode(bridge).listen PORT
 else
-  simpleRabbit.invoke cli.input[0], args...
+  name = cli.input[0]
+  client = dnode.connect(PORT)
+  client.on 'remote', (remote) ->
+    remote.method(name, args..., ->)
+    client.end()

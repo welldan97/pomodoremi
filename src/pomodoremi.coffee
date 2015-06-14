@@ -39,19 +39,24 @@ class Pomodoremi
       @timer.on event, (args...) =>
         Utils.callAll @modules, event, @interval, args...
 
-  start: (name = 'Pomodoro') ->
+  start: (args..., cb) ->
+    name = args[0] ? 'Pomodoro'
     @interval = new Interval('work', { name })
     @timer.start @interval
+    cb()
 
-  shortBreak: ->
+  shortBreak: (cb) ->
     @interval = new Interval('shortBreak')
     @timer.start @interval
+    cb()
 
-  longBreak: ->
+  longBreak: (cb) ->
     @interval = new Interval('longBreak')
     @timer.start @interval
+    cb()
 
-  stop: ->
+  stop: (cb) ->
     @timer.stop()
+    cb()
 
 module.exports = Pomodoremi

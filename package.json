@@ -22,13 +22,12 @@
     "async": "^1.2.1",
     "coffee-script": "^1.9.2",
     "commander": "^2.8.1",
+    "dnode": "^1.2.1",
     "keypress": "^0.2.1",
     "lodash": "^3.8.0",
     "meow": "^3.1.0",
     "moment": "^2.10.3",
     "node-notifier": "^4.2.1",
-    "progress": "^1.1.8",
-    "rabbit.js": "^0.4.2",
-    "simple-rabbit": "git://github.com/welldan97/simple-rabbit"
+    "progress": "^1.1.8"
   }
 }
