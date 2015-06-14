@@ -3,7 +3,7 @@ coffee = require 'gulp-coffee'
 insert = require 'gulp-insert'
 
 gulp.task 'build', ->
-  gulp.src(['src/*.coffee', '!./src/cli.coffee'])
+  gulp.src(['src/**/*.coffee', '!./src/cli.coffee'])
     .pipe(coffee(bare: true))
     .pipe gulp.dest('lib')
 

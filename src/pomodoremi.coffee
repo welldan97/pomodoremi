@@ -4,7 +4,8 @@ _ = require 'lodash'
 s = require 'underscore.string'
 require 'coffee-script/register'
 
-ProgressBar = require 'progress'
+# ProgressBar = require 'progress'
+ProgressBar = require './middleware/progress-bar'
 notifier = require 'node-notifier'
 
 Utils = require './utils'
@@ -43,13 +44,8 @@ class Pomodoremi
 
   constructor: (options = {}) ->
     _.merge(this, DEFAULT_OPTIONS, config, options)
-    @progressBarOptions = [':bar :status',
-      clear: true
-      complete: "█"
-      incomplete: "░"
-      width: 25
-      total: 100
-    ]
+    @middlewares = []
+    @middlewares.push new ProgressBar
     @timer = new Timer()
 
   start: (@name = 'Pomodoro') ->
@@ -83,9 +79,7 @@ class Pomodoremi
 
     typeUppercase = s(type).capitalize().value()
 
-    @progressBar = new ProgressBar @progressBarOptions...
-
-    @progressBar.update 0, status: this["#{type}Length"]
+    @middlewares[0].start(type, this["#{type}Length"], ->)
 
     @timer.start Utils.toMs(this["#{type}Length"])
 
@@ -93,14 +87,11 @@ class Pomodoremi
 
     @timer.notify (passed) =>
       this["onNotify#{typeUppercase}"](passed)
-      passedInMins = this["#{type}Length"] * (passed / Utils.toMs(this["#{type}Length"]))
-      status = this["#{type}Length"] - Math.floor(passedInMins)
-      @progressBar.update passed / Utils.toMs(this["#{type}Length"]), { status }
+      @middlewares[0].notify(type, passed, ->)
 
     @timer.finish =>
       this["onFinish#{typeUppercase}"]()
-      @progressBar.update 1, { status: 0 }
-      @progressBar = undefined
+      @middlewares[0].finish(type, ->)
       notifier.notify title: '🍅', message: @messages["after#{typeUppercase}"]
 
     @timer.overstay (delay) =>
@@ -109,7 +100,7 @@ class Pomodoremi
       notifier.notify title: '🍅', message: "Overstayed: #{overstayInMins}"
 
   resetTimer: ->
-    @progressBar.update 1, { status: 0 } if @progressBar
+    @middlewares[0].reset(->)
     console.log "  \##{@tags.join(' #')}" unless _.isEmpty @tags
     @tags = []
     if @type?
