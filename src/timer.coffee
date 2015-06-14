@@ -4,7 +4,8 @@ class Timer
 
   constructor: (@delay = ONE_MINUTE) ->
 
-  start: (@length) ->
+  start: (interval) ->
+    @length = interval.length
     if @startedAt
       @_onStop? @processed * @delay
     @processed = 0

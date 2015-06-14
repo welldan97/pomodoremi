@@ -17,11 +17,11 @@ describe 'Timer', ->
   describe '#start', ->
     it 'starts the timer', ->
       expect(timer.startedAt).to.not.exist
-      timer.start(100)
+      timer.start(length: 100)
       expect(timer.startedAt).to.exist
 
     it 'starts processing', ->
-      timer.start(100)
+      timer.start(length: 100)
       expect(timer.processed).to.equal 0
       clock.tick 10
       expect(timer.processed).to.equal 1
@@ -31,21 +31,21 @@ describe 'Timer', ->
       timer.onStart ->
         times += 1
       expect(times).to.equal 0
-      timer.start(100)
+      timer.start(length: 100)
       expect(times).to.equal 1
 
     it 'notifies onStop if double started', ->
       times = 0
       timer.onStop ->
         times += 1
-      timer.start(100)
+      timer.start(length: 100)
       expect(times).to.equal 0
-      timer.start(100)
+      timer.start(length: 100)
       expect(times).to.equal 1
 
   describe '#process', ->
     beforeEach ->
-      timer.start(100)
+      timer.start(length: 100)
 
     it 'notifies on update', ->
       times = 0
@@ -92,18 +92,18 @@ describe 'Timer', ->
       clock.tick 5
       timer.stop()
       clock.tick 3
-      timer.start(100)
+      timer.start(length: 100)
       clock.tick 25
       expect(times).to.equal 2
       timer.stop()
       clock.tick 3
-      timer.start(100)
+      timer.start(length: 100)
       clock.tick 200
       expect(times).to.equal 11
 
   describe '#stop', ->
     beforeEach ->
-      timer.start(100)
+      timer.start(length: 100)
 
     it 'stop processing', ->
       expect(timer.startedAt).to.exist

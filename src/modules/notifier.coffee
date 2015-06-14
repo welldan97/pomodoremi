@@ -9,11 +9,11 @@ class Notifier
 
   constructor: (@options = DEFAULT_OPTIONS) ->
 
-  finish: (type, cb) ->
-    nodeNotifier.notify title: '🍅', message: @options[type]
+  finish: (interval, cb) ->
+    nodeNotifier.notify title: '🍅', message: @options[interval.type]
     cb()
 
-  overstay: (type, delay, cb) ->
+  overstay: (interval, delay, cb) ->
     overstayInMins = Utils.toMin(delay)
     nodeNotifier.notify title: '🍅', message: "Overstayed: #{overstayInMins}"
     cb()

@@ -12,11 +12,12 @@ class CommandLineLog
 
   constructor: (@options = DEFAULT_OPTIONS) ->
 
-  start: (type, name, @length, cb) ->
-    switch type
+  start: (interval, cb) ->
+    @length = interval.length
+    switch interval.type
       when 'work'
+        console.log interval.name
         # console.log("(#{Utils.formatDate(new Date)})") unless @type?
-        console.log name
       when 'shortBreak'
         console.log '----'
       when 'longBreak'
@@ -27,17 +28,17 @@ class CommandLineLog
     @progress.update 0, status: Utils.formatMin(@length)
     cb()
 
-  update: (type, passed, cb) ->
+  update: (interval, passed, cb) ->
     status = Utils.formatMin(@length - passed)
     @progress.update passed / @length, { status }
     cb()
 
-  finish: (type, cb) ->
+  finish: (interval, cb) ->
     @progress.update 1, { status: 0 }
     @progress = undefined
     cb()
 
-  stop: (type, cb) ->
+  stop: (interval, cb) ->
     @progress.update 1, { status: 0 } if @progress
     # console.log "  \##{@tags.join(' #')}" unless _.isEmpty @tags
     # console.log("(#{Utils.formatDate(new Date)})\n") unless @type?

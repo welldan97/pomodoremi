@@ -10,6 +10,7 @@ Notifier = require './modules/notifier'
 
 Utils = require './utils'
 Timer = require './timer'
+Interval = require './interval'
 config = require CONFIG_PATH
 
 class Pomodoremi
@@ -21,6 +22,7 @@ class Pomodoremi
 
   constructor: (options = {}) ->
     _.merge(this, DEFAULT_OPTIONS, config, options)
+    _.merge(Interval, lengths: @lengths)
     @modules = []
     @modules.push new CommandLineLog
     @modules.push new Notifier
@@ -32,33 +34,33 @@ class Pomodoremi
     @timer.onStart =>
       @startTime = new Date
       @tags = []
-      @modules[0].start(@type, @name, @lengths[@type], ->)
+      @modules[0].start(@interval, ->)
 
     @timer.onStop =>
       @stopTime = new Date
-      @modules[0].stop(@type, ->)
+      @modules[0].stop(@interval, ->)
 
     @timer.onUpdate (passed) =>
-      @modules[0].update(@type, passed, ->)
+      @modules[0].update(@interval, passed, ->)
 
     @timer.onFinish =>
-      @modules[0].finish(@type, ->)
-      @modules[1].finish(@type, ->)
+      @modules[0].finish(@interval, ->)
+      @modules[1].finish(@interval, ->)
 
     @timer.onOverstay (delay) =>
-      @modules[1].overstay(@type, delay, ->)
+      @modules[1].overstay(@interval, delay, ->)
 
-  start: (@name = 'Pomodoro') ->
-    @type = 'work'
-    @timer.start @lengths[@type]
+  start: (name = 'Pomodoro') ->
+    @interval = new Interval('work', { name })
+    @timer.start @interval
 
   shortBreak: ->
-    @type = 'shortBreak'
-    @timer.start @lengths[@type]
+    @interval = new Interval('shortBreak')
+    @timer.start @interval
 
   longBreak: ->
-    @type = 'longBreak'
-    @timer.start @lengths[@type]
+    @interval = new Interval('longBreak')
+    @timer.start @interval
 
   stop: ->
     @type = undefined
