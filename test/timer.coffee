@@ -117,3 +117,12 @@ describe 'Timer', ->
       expect(times).to.equal 0
       timer.stop()
       expect(times).to.equal 1
+
+    it 'notifies only when started', ->
+      times = 0
+      timer.onStop ->
+        times += 1
+      expect(times).to.equal 0
+      timer.stop()
+      timer.stop()
+      expect(times).to.equal 1

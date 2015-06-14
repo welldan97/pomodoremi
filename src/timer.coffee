@@ -13,8 +13,10 @@ class Timer
     @_schedule(@startedAt)
 
   stop: ->
+    if @startedAt
+      @_onStop? @processed * @delay
+
     @startedAt = undefined
-    @_onStop? @processed * @delay
 
   process: (startedAt) ->
     return unless @startedAt
