@@ -26,6 +26,15 @@ class Pomodoremi
 
     @timer = new Timer()
 
+    @timer.onStart =>
+      @startTime = new Date
+      @tags = []
+      @middlewares[0].start(@type, @name, @lengths[@type], ->)
+
+    @timer.onStop =>
+      @stopTime = new Date
+      @middlewares[0].stop(@type, ->)
+
     @timer.onUpdate (passed) =>
       @middlewares[0].update(@type, passed, ->)
 
@@ -37,36 +46,23 @@ class Pomodoremi
       @middlewares[1].overstay(@type, delay, ->)
 
   start: (@name = 'Pomodoro') ->
-    @_startTimer('work')
-
-  stop: ->
-    @_stopTimer()
+    @type = 'work'
+    @timer.start @lengths[@type]
 
   shortBreak: ->
-    @_startTimer('shortBreak')
+    @type = 'shortBreak'
+    @timer.start @lengths[@type]
 
   longBreak: ->
-    @_startTimer('longBreak')
+    @type = 'longBreak'
+    @timer.start @lengths[@type]
+
+  stop: ->
+    @type = undefined
+    @timer.stop()
 
   tag: (tag) ->
     return unless tag?
     @tags.push tag
-
-  _startTimer: (type, name) ->
-    @_stopTimer()
-    @type = type
-    @startTime = new Date
-
-    @middlewares[0].start(type, @name, @lengths[type], ->)
-
-    @timer.start @lengths[type]
-
-  _stopTimer: ->
-    @middlewares[0].stop(@type, ->)
-    @tags = []
-    if @type?
-      @stopTime = new Date
-    @type = null
-    @timer.stop()
 
 module.exports = Pomodoremi
