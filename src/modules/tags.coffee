@@ -6,5 +6,6 @@ class Tags
 
   start: (interval, cb) ->
     interval.tags = []
+    cb()
 
 module.exports = Tags

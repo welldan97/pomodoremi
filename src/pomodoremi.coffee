@@ -2,6 +2,7 @@ CONFIG_PATH = "#{process.env.HOME}/.pomodoremi/config"
 
 _ = require 'lodash'
 s = require 'underscore.string'
+async = require 'async'
 require 'coffee-script/register'
 
 Tags = require './modules/tags'
@@ -21,37 +22,34 @@ class Pomodoremi
       shortBreak: Utils.toMs(5)
       longBreak: Utils.toMs(15)
 
+    modules: [
+      new Track
+      new Tags
+      new CommandLineLog
+      new Notifier
+    ]
+
   constructor: (options = {}) ->
     _.merge(this, DEFAULT_OPTIONS, config, options)
     _.merge(Interval, lengths: @lengths)
-    @modules = []
-    @modules.push new CommandLineLog
-    @modules.push new Notifier
-    @modules.push new Tags
-    @modules.push new Track
-    _.merge(this, @modules[2].commands)
-
+    commands = _(@modules).pluck('commands').compact().value()
+    _.merge(this, commands)
     @timer = new Timer()
 
     @timer.onStart =>
-      @modules[0].start(@interval, ->)
-      @modules[2].start(@interval, ->)
-      @modules[3].start(@interval, ->)
+      Utils.callAll @modules, 'start', @interval
 
     @timer.onStop =>
-      @interval.stopTime = new Date
-      @modules[0].stop(@interval, ->)
-      @modules[3].stop(@interval, ->)
+      Utils.callAll @modules, 'stop', @interval
 
     @timer.onUpdate (passed) =>
-      @modules[0].update(@interval, passed, ->)
+      Utils.callAll @modules, 'update', @interval, passed
 
     @timer.onFinish =>
-      @modules[0].finish(@interval, ->)
-      @modules[1].finish(@interval, ->)
+      Utils.callAll @modules, 'finish', @interval
 
     @timer.onOverstay (delay) =>
-      @modules[1].overstay(@interval, delay, ->)
+      Utils.callAll @modules, 'overstay', @interval, delay
 
   start: (name = 'Pomodoro') ->
     @interval = new Interval('work', { name })
@@ -66,7 +64,6 @@ class Pomodoremi
     @timer.start @interval
 
   stop: ->
-    @type = undefined
     @timer.stop()
 
 module.exports = Pomodoremi

@@ -1,3 +1,6 @@
+async = require 'async'
+_ = require 'lodash'
+
 ONE_MIN_IN_MS = 60 * 1000
 ONE_MIN_IN_MS = 300
 
@@ -8,3 +11,9 @@ module.exports =
   toMin: (ms) -> ms / ONE_MIN_IN_MS
   formatDate: (date) -> moment().format('h:mm:ss a')
   formatMin: (ms) -> Math.floor(@toMin(ms))
+  callAll: (arr, fn, args...) ->
+    async.eachSeries arr, (e, cb) ->
+      if _.isFunction(e[fn])
+        e[fn](args..., cb)
+      else
+        cb()
