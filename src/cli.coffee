@@ -29,5 +29,6 @@ else
   name = cli.input[0]
   client = dnode.connect(PORT)
   client.on 'remote', (remote) ->
-    remote.method(name, args..., ->)
-    client.end()
+    remote.method name, args..., (result) ->
+      console.log result if result?
+      client.end()
