@@ -16,9 +16,9 @@ describe 'Timer', ->
 
   describe '#start', ->
     it 'starts the timer', ->
-      expect(timer.started).not.to.be
+      expect(timer.startedAt).to.not.exist
       timer.start(100)
-      expect(timer.started).to.be
+      expect(timer.startedAt).to.exist
 
     it 'starts processing', ->
       timer.start(100)
@@ -89,6 +89,6 @@ describe 'Timer', ->
       timer.start(100)
 
     it 'stop processing', ->
-      expect(timer.started).to.be
+      expect(timer.startedAt).to.exist
       timer.stop()
-      expect(timer.started).not.to.be
+      expect(timer.startedAt).to.not.exist

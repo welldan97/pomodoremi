@@ -10,7 +10,7 @@ class Timer
     @_schedule(@startedAt)
 
   stop: ->
-    @startedAt = false
+    @startedAt = undefined
 
   process: (startedAt) ->
     return unless @startedAt
