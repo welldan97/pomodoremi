@@ -26,36 +26,34 @@ class Pomodoremi
 
     @timer = new Timer()
 
-    @timer.update (passed) =>
+    @timer.onUpdate (passed) =>
       @middlewares[0].update(@type, passed, ->)
 
-    @timer.finish =>
+    @timer.onFinish =>
       @middlewares[0].finish(@type, ->)
       @middlewares[1].finish(@type, ->)
 
-    @timer.overstay (delay) =>
+    @timer.onOverstay (delay) =>
       @middlewares[1].overstay(@type, delay, ->)
 
   start: (@name = 'Pomodoro') ->
-    @resetTimer()
-    @startTimer('work')
+    @_startTimer('work')
 
   stop: ->
-    @resetTimer()
+    @_stopTimer()
 
   shortBreak: ->
-    @resetTimer()
-    @startTimer('shortBreak')
+    @_startTimer('shortBreak')
 
   longBreak: ->
-    @resetTimer()
-    @startTimer('longBreak')
+    @_startTimer('longBreak')
 
   tag: (tag) ->
     return unless tag?
     @tags.push tag
 
-  startTimer: (type, name) ->
+  _startTimer: (type, name) ->
+    @_stopTimer()
     @type = type
     @startTime = new Date
 
@@ -63,8 +61,8 @@ class Pomodoremi
 
     @timer.start @lengths[type]
 
-  resetTimer: ->
-    @middlewares[0].reset(->)
+  _stopTimer: ->
+    @middlewares[0].stop(@type, ->)
     @tags = []
     if @type?
       @stopTime = new Date

@@ -37,13 +37,10 @@ class CommandLineLog
     @progress = undefined
     cb()
 
-  stop: (cb) ->
-    # console.log("(#{Utils.formatDate(new Date)})\n") unless @type?
-    cb()
-
-  reset: (cb) ->
+  stop: (type, cb) ->
     @progress.update 1, { status: 0 } if @progress
     # console.log "  \##{@tags.join(' #')}" unless _.isEmpty @tags
+    # console.log("(#{Utils.formatDate(new Date)})\n") unless @type?
     cb()
 
 module.exports = CommandLineLog

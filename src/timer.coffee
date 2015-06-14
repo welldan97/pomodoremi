@@ -5,12 +5,16 @@ class Timer
   constructor: (@delay = ONE_MINUTE) ->
 
   start: (@length) ->
+    if @startedAt
+      @_onStop? @processed * @delay
     @processed = 0
     @startedAt = new Date()
+    @_onStart?()
     @_schedule(@startedAt)
 
   stop: ->
     @startedAt = undefined
+    @_onStop? @processed * @delay
 
   process: (startedAt) ->
     return unless @startedAt
@@ -18,16 +22,18 @@ class Timer
 
     @processed += 1
     if (@processed - 1) * @delay >= @length
-      @onOverstay? @processed * @delay - @length
+      @_onOverstay? @processed * @delay - @length
     else if @processed * @delay >= @length
-      @onFinish?()
+      @_onFinish?()
     else
-      @onUpdate? @processed * @delay
+      @_onUpdate? @processed * @delay
     @_schedule(startedAt)
 
-  update: (@onUpdate) ->
-  overstay: (@onOverstay) ->
-  finish: (@onFinish) ->
+  onStart: (@_onStart) ->
+  onStop: (@_onStop) ->
+  onUpdate: (@_onUpdate) ->
+  onFinish: (@_onFinish) ->
+  onOverstay: (@_onOverstay) ->
 
   _schedule: (startedAt) ->
     setTimeout (=> @process(startedAt)), @delay
