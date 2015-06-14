@@ -4,6 +4,7 @@ _ = require 'lodash'
 s = require 'underscore.string'
 require 'coffee-script/register'
 
+Tags = require './modules/tags'
 CommandLineLog = require './modules/command-line-log'
 Notifier = require './modules/notifier'
 
@@ -23,6 +24,8 @@ class Pomodoremi
     @modules = []
     @modules.push new CommandLineLog
     @modules.push new Notifier
+    @modules.push new Tags
+    _.merge(this, @modules[2].commands)
 
     @timer = new Timer()
 
@@ -60,9 +63,5 @@ class Pomodoremi
   stop: ->
     @type = undefined
     @timer.stop()
-
-  tag: (tag) ->
-    return unless tag?
-    @tags.push tag
 
 module.exports = Pomodoremi
