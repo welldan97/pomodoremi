@@ -7,8 +7,7 @@ class Timer
   start: (@length) ->
     @processed = 0
     @startedAt = new Date()
-    startedAt = @startedAt
-    setTimeout (do (startedAt) => => @process(startedAt)), @delay
+    @_schedule(@startedAt)
 
   stop: ->
     @startedAt = false
@@ -16,6 +15,7 @@ class Timer
   process: (startedAt) ->
     return unless @startedAt
     return unless @startedAt == startedAt
+
     @processed += 1
     if (@processed - 1) * @delay >= @length
       @onOverstay? @processed * @delay - @length
@@ -23,10 +23,13 @@ class Timer
       @onFinish?()
     else
       @onUpdate? @processed * @delay
-    setTimeout ( => @process(startedAt)), @delay
+    @_schedule(startedAt)
 
   update: (@onUpdate) ->
   overstay: (@onOverstay) ->
   finish: (@onFinish) ->
+
+  _schedule: (startedAt) ->
+    setTimeout (=> @process(startedAt)), @delay
 
 module.exports = Timer
