@@ -30,7 +30,6 @@ class Pomodoremi
 
   stop: ->
     @resetTimer()
-    console.log("(#{Utils.formatDate(new Date)})\n") unless @type?
 
   shortBreak: ->
     @resetTimer()
