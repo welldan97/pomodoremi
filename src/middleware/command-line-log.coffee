@@ -24,13 +24,12 @@ class CommandLineLog
 
 
     @progress = new Progress @options...
-    @progress.update 0, status: @length
+    @progress.update 0, status: Utils.formatMin(@length)
     cb()
 
   update: (type, passed, cb) ->
-    passedInMins = @length * (passed / Utils.toMs(@length))
-    status = @length - Math.floor(passedInMins)
-    @progress.update passed / Utils.toMs(@length), { status }
+    status = Utils.formatMin(@length - passed)
+    @progress.update passed / @length, { status }
     cb()
 
   finish: (type, cb) ->
