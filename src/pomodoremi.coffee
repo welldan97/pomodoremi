@@ -36,20 +36,9 @@ class Pomodoremi
     _.merge(this, commands)
     @timer = new Timer()
 
-    @timer.onStart =>
-      Utils.callAll @modules, 'start', @interval
-
-    @timer.onStop =>
-      Utils.callAll @modules, 'stop', @interval
-
-    @timer.onUpdate (passed) =>
-      Utils.callAll @modules, 'update', @interval, passed
-
-    @timer.onFinish =>
-      Utils.callAll @modules, 'finish', @interval
-
-    @timer.onOverstay (delay) =>
-      Utils.callAll @modules, 'overstay', @interval, delay
+    _.forEach ['start', 'stop', 'update', 'finish', 'overstay'], (event) =>
+      @timer.on event, (args...) =>
+        Utils.callAll @modules, event, @interval, args...
 
   start: (name = 'Pomodoro') ->
     @interval = new Interval('work', { name })

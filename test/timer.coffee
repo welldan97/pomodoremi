@@ -28,7 +28,7 @@ describe 'Timer', ->
 
     it 'notifies', ->
       times = 0
-      timer.onStart ->
+      timer.on 'start', ->
         times += 1
       expect(times).to.equal 0
       timer.start(length: 100)
@@ -36,7 +36,7 @@ describe 'Timer', ->
 
     it 'notifies onStop if double started', ->
       times = 0
-      timer.onStop ->
+      timer.on 'stop', ->
         times += 1
       timer.start(length: 100)
       expect(times).to.equal 0
@@ -49,7 +49,7 @@ describe 'Timer', ->
 
     it 'notifies on update', ->
       times = 0
-      timer.onUpdate ->
+      timer.on 'update', ->
         times += 1
       expect(times).to.equal 0
       clock.tick 10
@@ -59,7 +59,7 @@ describe 'Timer', ->
 
     it 'notifies on finish', ->
       times = 0
-      timer.onFinish ->
+      timer.on 'finish', ->
         times += 1
       expect(times).to.equal 0
       clock.tick 200
@@ -67,7 +67,7 @@ describe 'Timer', ->
 
     it 'notifies on overstay', ->
       times = 0
-      timer.onOverstay ->
+      timer.on 'overstay', ->
         times += 1
       expect(times).to.equal 0
       clock.tick 200
@@ -75,7 +75,7 @@ describe 'Timer', ->
 
     it 'not notifies if stopped', ->
       times = 0
-      timer.onUpdate ->
+      timer.on 'update', ->
         times += 1
       expect(times).to.equal 0
       clock.tick 15
@@ -85,7 +85,7 @@ describe 'Timer', ->
 
     it 'not double notifies if stopped and started again', ->
       times = 0
-      timer.onUpdate ->
+      timer.on 'update', ->
         times += 1
 
       expect(times).to.equal 0
@@ -112,7 +112,7 @@ describe 'Timer', ->
 
     it 'notifies', ->
       times = 0
-      timer.onStop ->
+      timer.on 'stop', ->
         times += 1
       expect(times).to.equal 0
       timer.stop()
@@ -120,7 +120,7 @@ describe 'Timer', ->
 
     it 'notifies only when started', ->
       times = 0
-      timer.onStop ->
+      timer.on 'stop', ->
         times += 1
       expect(times).to.equal 0
       timer.stop()

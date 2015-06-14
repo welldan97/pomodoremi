@@ -38,7 +38,7 @@ class CommandLineLog
     @progress = undefined
     cb()
 
-  stop: (interval, cb) ->
+  stop: (interval, delay, cb) ->
     @progress.update 1, { status: 0 } if @progress
     # console.log "  \##{@tags.join(' #')}" unless _.isEmpty @tags
     # console.log("(#{Utils.formatDate(new Date)})\n") unless @type?

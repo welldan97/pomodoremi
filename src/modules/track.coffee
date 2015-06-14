@@ -3,7 +3,7 @@ class Track
     interval.startTime = new Date
     cb()
 
-  stop: (interval, cb) ->
+  stop: (interval, delay, cb) ->
     interval.stopTime = new Date
     cb()
 
