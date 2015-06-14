@@ -4,8 +4,8 @@ _ = require 'lodash'
 s = require 'underscore.string'
 require 'coffee-script/register'
 
-CommandLineLog = require './middleware/command-line-log'
-Notifier = require './middleware/notifier'
+CommandLineLog = require './modules/command-line-log'
+Notifier = require './modules/notifier'
 
 Utils = require './utils'
 Timer = require './timer'
@@ -20,30 +20,30 @@ class Pomodoremi
 
   constructor: (options = {}) ->
     _.merge(this, DEFAULT_OPTIONS, config, options)
-    @middlewares = []
-    @middlewares.push new CommandLineLog
-    @middlewares.push new Notifier
+    @modules = []
+    @modules.push new CommandLineLog
+    @modules.push new Notifier
 
     @timer = new Timer()
 
     @timer.onStart =>
       @startTime = new Date
       @tags = []
-      @middlewares[0].start(@type, @name, @lengths[@type], ->)
+      @modules[0].start(@type, @name, @lengths[@type], ->)
 
     @timer.onStop =>
       @stopTime = new Date
-      @middlewares[0].stop(@type, ->)
+      @modules[0].stop(@type, ->)
 
     @timer.onUpdate (passed) =>
-      @middlewares[0].update(@type, passed, ->)
+      @modules[0].update(@type, passed, ->)
 
     @timer.onFinish =>
-      @middlewares[0].finish(@type, ->)
-      @middlewares[1].finish(@type, ->)
+      @modules[0].finish(@type, ->)
+      @modules[1].finish(@type, ->)
 
     @timer.onOverstay (delay) =>
-      @middlewares[1].overstay(@type, delay, ->)
+      @modules[1].overstay(@type, delay, ->)
 
   start: (@name = 'Pomodoro') ->
     @type = 'work'
