@@ -30,8 +30,9 @@ class Pomodoremi
   constructor: (options = {}) ->
     _.merge(this, DEFAULT_OPTIONS, config, options)
     _.merge(Interval, lengths: @lengths)
-    commands = _(@modules).pluck('commands').compact().value()
-    _.merge(this, commands)
+    commandsList = _(@modules).pluck('commands').compact().value()
+    _.forEach commandsList, (commands) =>
+      _.merge(this, commands)
     @timer = new Timer()
 
     _.forEach ['start', 'stop', 'update', 'finish', 'overstay'], (event) =>
