@@ -6,14 +6,16 @@ class Timer
 
   start: (@length) ->
     @processed = 0
-    @started = true
-    setTimeout (=> @process()), @delay
+    @startedAt = new Date()
+    startedAt = @startedAt
+    setTimeout (do (startedAt) => => @process(startedAt)), @delay
 
   stop: ->
-    @started = false
+    @startedAt = false
 
-  process: ->
-    return unless @started
+  process: (startedAt) ->
+    return unless @startedAt
+    return unless @startedAt == startedAt
     @processed += 1
     if (@processed - 1) * @delay >= @length
       @onOverstay? @processed * @delay - @length
@@ -21,7 +23,7 @@ class Timer
       @onFinish?()
     else
       @onUpdate? @processed * @delay
-    setTimeout (=> @process()), @delay
+    setTimeout ( => @process(startedAt)), @delay
 
   update: (@onUpdate) ->
   overstay: (@onOverstay) ->

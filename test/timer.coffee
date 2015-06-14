@@ -66,6 +66,24 @@ describe 'Timer', ->
       clock.tick 200
       expect(times).to.equal 1
 
+    it 'not double notifies if stopped and started again', ->
+      times = 0
+      timer.update ->
+        times += 1
+
+      expect(times).to.equal 0
+      clock.tick 5
+      timer.stop()
+      clock.tick 3
+      timer.start(100)
+      clock.tick 25
+      expect(times).to.equal 2
+      timer.stop()
+      clock.tick 3
+      timer.start(100)
+      clock.tick 200
+      expect(times).to.equal 11
+
   describe '#stop', ->
     beforeEach ->
       timer.start(100)
@@ -73,4 +91,4 @@ describe 'Timer', ->
     it 'stop processing', ->
       expect(timer.started).to.be
       timer.stop()
-      expect(timer.processed).not.to.be
+      expect(timer.started).not.to.be
