@@ -14,7 +14,7 @@ Timer = require './timer'
 Interval = require './interval'
 
 config =
-  if fs.existsSync CONFIG_PATH
+  if Utils.canRequire CONFIG_PATH
     require CONFIG_PATH
   else
     ->

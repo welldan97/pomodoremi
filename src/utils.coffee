@@ -16,3 +16,9 @@ module.exports =
         e[fn](args..., cb)
       else
         cb()
+  canRequire: (module) ->
+    try
+      require.resolve module
+      true
+    catch e
+      false
