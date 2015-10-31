@@ -1,5 +1,6 @@
 CONFIG_PATH = "#{process.env.HOME}/.pomodoremi/config"
 
+fs = require 'fs'
 _ = require 'lodash'
 require 'coffee-script/register'
 
@@ -11,7 +12,12 @@ Notifier = require './modules/notifier'
 Utils = require './utils'
 Timer = require './timer'
 Interval = require './interval'
-config = require CONFIG_PATH
+
+config =
+  if fs.existsSync CONFIG_PATH
+    require CONFIG_PATH
+  else
+    ->
 
 class Pomodoremi
   DEFAULT_OPTIONS =
