@@ -3,30 +3,21 @@ sinon = require 'sinon'
 
 Interval = require '../src/interval'
 clock = undefined
+interval = undefined
 
 describe 'Interval', ->
   beforeEach ->
     clock = sinon.useFakeTimers()
-
-  describe '#constructor', ->
-    it 'sets duration depending on type', ->
-      interval = new Interval 'work', duration: 777
-      expect(interval.duration).to.equal 777
-
-    it 'sets name', ->
-      interval = new Interval 'work', name: 'Black Mirror', duration: 777
-      expect(interval.name).to.equal 'Black Mirror'
+    interval = new Interval duration: 777
 
   describe '#timePassed', ->
     it 'counts time passed', ->
-      interval = new Interval 'work', duration: 777
       interval.startedAt = new Date
       clock.tick 100
       expect(interval.timePassed()).to.equal 100
 
   describe '#timeOverstayed', ->
     it 'counts time overstayed', ->
-      interval = new Interval 'work', duration: 777
       interval.startedAt = new Date
       clock.tick 100
       expect(interval.timeOverstayed()).to.equal -677
@@ -39,7 +30,6 @@ describe 'Interval', ->
 
   describe '#isFinished', ->
     it 'returns true if it is already finished', ->
-      interval = new Interval 'work', duration: 777
       interval.startedAt = new Date
       clock.tick 100
       expect(interval.isFinished()).to.equal false

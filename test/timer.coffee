@@ -13,7 +13,7 @@ describe 'Timer', ->
     timer = new Timer(10)
     clock = sinon.useFakeTimers()
 
-    interval = new Interval('work', duration: 100)
+    interval = new Interval(duration: 100)
 
   afterEach ->
     clock.restore()
@@ -88,7 +88,7 @@ describe 'Timer', ->
       expect(times).to.equal 1
 
     it 'not double notifies if stopped and started again', ->
-      interval2 = new Interval('work', duration: 100)
+      interval2 = new Interval(duration: 100)
 
       times = 0
       timer.on 'update', ->
