@@ -13,9 +13,9 @@ class Notifier
     nodeNotifier.notify title: '🍅', message: @options[interval.type]
     cb()
 
-  overstay: (interval, delay, cb) ->
-    overstayInMins = Utils.toMin(delay)
-    nodeNotifier.notify title: '🍅', message: "Overstayed: #{overstayInMins}"
+  overstay: (interval, cb) ->
+    overstay = Utils.formatMin interval.timeOverstayed()
+    nodeNotifier.notify title: '🍅', message: "Overstayed: #{overstay}"
     cb()
 
 module.exports = Notifier

@@ -1,4 +1,4 @@
-PORT = 7387
+PORT = process.env.POMODOREMI_PORT ? 7387
 
 _ = require 'lodash'
 s = require 'underscore.string'

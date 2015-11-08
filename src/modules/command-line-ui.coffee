@@ -19,7 +19,6 @@ class CommandLineUI
     console.log("(#{Utils.formatDate(new Date)})") unless @isSessionStarted
     @isSessionStarted = true
     @isSessionClosing = false
-    @length = interval.length
     switch interval.type
       when 'work'
         console.log interval.name
@@ -30,12 +29,12 @@ class CommandLineUI
 
 
     @progress = new Progress @options...
-    @progress.update 0, status: Utils.formatMin(@length)
+    @progress.update 0, status: Utils.formatMin(interval.duration)
     cb()
 
-  update: (interval, passed, cb) ->
-    status = Utils.formatMin(@length - passed)
-    @progress.update passed / @length, { status }
+  update: (interval, cb) ->
+    status = Utils.formatMin(interval.duration - interval.timePassed())
+    @progress.update interval.timePassed() / interval.duration, { status }
     cb()
 
   finish: (interval, cb) ->
@@ -43,7 +42,7 @@ class CommandLineUI
     @progress = undefined
     cb()
 
-  stop: (interval, delay, cb) ->
+  stop: (interval, cb) ->
     @isSessionClosing = true
     @progress.update 1, { status: 0 } if @progress
     console.log "  \##{interval.tags.join(' #')}" unless _.isEmpty interval.tags
