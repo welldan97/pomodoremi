@@ -38,7 +38,7 @@ class Timer
       @emit 'finish'
       @finishEmitted = true
     else
-      @emit 'overstay', @interval.timePassed() - @interval.length
+      @emit 'overstay', @interval.timeOverstayed()
 
     @_schedule(interval)
 

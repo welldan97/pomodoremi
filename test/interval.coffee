@@ -24,6 +24,19 @@ describe 'Interval', ->
       clock.tick 100
       expect(interval.timePassed()).to.equal 100
 
+  describe '#timeOverstayed', ->
+    it 'counts time overstayed', ->
+      interval = new Interval 'work', length: 777
+      interval.startedAt = new Date
+      clock.tick 100
+      expect(interval.timeOverstayed()).to.equal -677
+
+      clock.tick 677
+      expect(interval.timeOverstayed()).to.equal 0
+
+      clock.tick 1
+      expect(interval.timeOverstayed()).to.equal 1
+
   describe '#isFinished', ->
     it 'returns true if it is already finished', ->
       interval = new Interval 'work', length: 777
