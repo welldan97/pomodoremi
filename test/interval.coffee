@@ -23,3 +23,16 @@ describe 'Interval', ->
       interval.startedAt = new Date
       clock.tick 100
       expect(interval.timePassed()).to.equal 100
+
+  describe '#isFinished', ->
+    it 'returns true if it is already finished', ->
+      interval = new Interval 'work', length: 777
+      interval.startedAt = new Date
+      clock.tick 100
+      expect(interval.isFinished()).to.equal false
+
+      clock.tick 677
+      expect(interval.isFinished()).to.equal true
+
+      clock.tick 1
+      expect(interval.isFinished()).to.equal true

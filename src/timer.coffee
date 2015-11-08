@@ -10,6 +10,8 @@ class Timer
     @emit = EventEmitter::emit
 
   start: (@interval) ->
+    @finishEmitted = false
+
     @length = @interval.length
     @emit 'stop', @interval.timePassed() if @startedAt
     @processed = 0
@@ -28,12 +30,13 @@ class Timer
     return unless @startedAt == startedAt
 
     @processed += 1
-    if (@processed - 1) * @delay >= @length
-      @emit 'overstay', @processed * @delay - @length
-    else if @processed * @delay >= @length
-      @emit 'finish'
-    else
+    if !@interval.isFinished()
       @emit 'update', @processed * @delay
+    else if !@finishEmitted
+      @emit 'finish'
+      @finishEmitted = true
+    else
+      @emit 'overstay', @processed * @delay - @length
 
     @_schedule(startedAt)
 

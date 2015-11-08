@@ -9,5 +9,7 @@ class Interval
   timePassed: ->
     new Date - @startedAt
 
+  isFinished: ->
+    @timePassed() - @length >= 0
 
 module.exports = Interval
