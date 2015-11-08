@@ -5,13 +5,11 @@ class Interval
     @name = options['name'] if options
     @length = Interval.lengths[@type]
 
-  start: ->
-    @startedAt = new Date
-
-  stop: ->
-    @stoppedAt = new Date
+  startedAt: undefined
+  stoppedAt: undefined
 
   timePassed: ->
     new Date - @startedAt
+
 
 module.exports = Interval

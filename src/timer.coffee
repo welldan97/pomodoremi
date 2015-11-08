@@ -11,10 +11,10 @@ class Timer
 
   start: (@interval) ->
     @length = @interval.length
-    @interval.start()
     @emit 'stop', @interval.timePassed() if @startedAt
     @processed = 0
     @startedAt = new Date()
+    @interval.startedAt = @startedAt
     @emit 'start'
     @_schedule(@startedAt)
 
