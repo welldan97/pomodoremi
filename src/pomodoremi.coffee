@@ -33,17 +33,16 @@ class Pomodoremi
       longBreak: Utils.toMs(15)
 
     modules: [
-      new Track
-      new Tags
-      new CommandLineUI
-      new Notifier
+      # new Track
+      # new Tags
+      # new CommandLineUI
+      # new Notifier
     ]
 
   constructor: (options = {}) ->
 
     _.merge(this, DEFAULT_OPTIONS, options)
     config.apply this
-    _.merge(Interval, lengths: @lengths)
     @timer = new Timer()
     commandsList = _(@modules).pluck('commands').compact().value()
     _.forEach commandsList, (commands) => _.merge(this, commands)
@@ -56,17 +55,17 @@ class Pomodoremi
 
   start: (args..., cb) ->
     name = args[0] ? 'Pomodoro'
-    @interval = new Interval('work', { name })
+    @interval = new Interval('work', { name, length: @lengths['work'] })
     @timer.start @interval
     cb()
 
   shortBreak: (cb) ->
-    @interval = new Interval('shortBreak')
+    @interval = new Interval('shortBreak', length: @lengths['shortBreak'])
     @timer.start @interval
     cb()
 
   longBreak: (cb) ->
-    @interval = new Interval('longBreak')
+    @interval = new Interval('longBreak', length: @lengths['longBreak'])
     @timer.start @interval
     cb()
 
