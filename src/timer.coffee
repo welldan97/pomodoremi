@@ -9,38 +9,40 @@ class Timer
     @on = EventEmitter::on
     @emit = EventEmitter::emit
 
-  start: (@interval) ->
+  start: (interval) ->
     @finishEmitted = false
-
-    @length = @interval.length
-    @emit 'stop', @interval.timePassed() if @startedAt
     @processed = 0
-    @startedAt = new Date()
-    @interval.startedAt = @startedAt
+
+    @stop()
+
+    @interval = interval
+    @interval.startedAt = new Date()
     @emit 'start'
-    @_schedule(@startedAt)
+
+    @_schedule(interval)
 
   stop: ->
-    @emit 'stop', @interval.timePassed() if @startedAt
+    return unless @interval?
+    @interval.stoppedAt = new Date()
+    @emit 'stop', @interval.timePassed()
+    @interval = undefined
 
-    @startedAt = undefined
-
-  process: (startedAt) ->
-    return unless @startedAt
-    return unless @startedAt == startedAt
+  process: (interval) ->
+    return unless @interval?
+    return unless @interval == interval
 
     @processed += 1
     if !@interval.isFinished()
-      @emit 'update', @processed * @delay
+      @emit 'update', @interval.timePassed()
     else if !@finishEmitted
       @emit 'finish'
       @finishEmitted = true
     else
-      @emit 'overstay', @processed * @delay - @length
+      @emit 'overstay', @interval.timePassed() - @interval.length
 
-    @_schedule(startedAt)
+    @_schedule(interval)
 
-  _schedule: (startedAt) ->
-    setTimeout (=> @process(startedAt)), @delay
+  _schedule: (interval) ->
+    setTimeout (=> @process(interval)), @delay
 
 module.exports = Timer

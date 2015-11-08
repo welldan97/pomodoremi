@@ -19,10 +19,10 @@ describe 'Timer', ->
     clock.restore()
 
   describe '#start', ->
-    it 'starts the timer', ->
-      expect(timer.startedAt).to.not.exist
+    it 'sets the interval', ->
+      expect(timer.interval).to.not.exist
       timer.start(interval)
-      expect(timer.startedAt).to.exist
+      expect(timer.interval).to.exist
 
     it 'starts processing', ->
       timer.start(interval)
@@ -88,6 +88,8 @@ describe 'Timer', ->
       expect(times).to.equal 1
 
     it 'not double notifies if stopped and started again', ->
+      interval2 = new Interval('work', length: 100)
+
       times = 0
       timer.on 'update', ->
         times += 1
@@ -96,7 +98,7 @@ describe 'Timer', ->
       clock.tick 5
       timer.stop()
       clock.tick 3
-      timer.start(interval)
+      timer.start(interval2)
       clock.tick 25
       expect(times).to.equal 2
       timer.stop()
@@ -109,10 +111,10 @@ describe 'Timer', ->
     beforeEach ->
       timer.start(interval)
 
-    it 'stop processing', ->
-      expect(timer.startedAt).to.exist
+    it 'stops processing', ->
+      expect(timer.interval).to.exist
       timer.stop()
-      expect(timer.startedAt).to.not.exist
+      expect(timer.interval).to.not.exist
 
     it 'notifies', ->
       times = 0
