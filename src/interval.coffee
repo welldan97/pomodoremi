@@ -5,4 +5,10 @@ class Interval
     @name = options['name'] if options
     @length = Interval.lengths[@type]
 
+  start: ->
+    @startedAt = new Date
+
+  stop: ->
+    @stoppedAt = new Date
+
 module.exports = Interval

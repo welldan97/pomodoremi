@@ -57,16 +57,19 @@ class Pomodoremi
   start: (args..., cb) ->
     name = args[0] ? 'Pomodoro'
     @interval = new Interval('work', { name })
+    @interval.start()
     @timer.start @interval
     cb()
 
   shortBreak: (cb) ->
     @interval = new Interval('shortBreak')
+    @interval.start()
     @timer.start @interval
     cb()
 
   longBreak: (cb) ->
     @interval = new Interval('longBreak')
+    @interval.start()
     @timer.start @interval
     cb()
 
