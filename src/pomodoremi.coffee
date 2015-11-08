@@ -1,5 +1,3 @@
-CONFIG_PATH = "#{process.env.HOME}/.pomodoremi/config"
-
 fs = require 'fs'
 _ = require 'lodash'
 require 'coffee-script/register'
@@ -14,13 +12,9 @@ Utils = require './utils'
 Timer = require './timer'
 IntervalFactory = require './interval-factory'
 
-config =
-  # if Utils.canRequire CONFIG_PATH
-    # require CONFIG_PATH
-  # else
-    ->
-
 class Pomodoremi
+  PERSONAL_CONFIG_PATH = "#{process.env.HOME}/.pomodoremi/config"
+  EVENTS = ['start', 'stop', 'update', 'finish', 'overstay']
   DEFAULT_OPTIONS =
     help:
       start: -> ['start [name]', 'starts Pomodoro']
@@ -42,20 +36,10 @@ class Pomodoremi
     ]
 
   constructor: (options = {}) ->
-
-    _.merge(this, DEFAULT_OPTIONS, options)
-    config.apply this
     @timer = new Timer()
-    commandsList = _(@modules).pluck('commands').compact().value()
-    _.forEach commandsList, (commands) => _.merge(this, commands)
-    helpList = _(@modules).pluck('help').compact().value()
-    _.forEach helpList, (help) => _.merge(@help, help)
-
-    _.forEach ['start', 'stop', 'update', 'finish', 'overstay'], (event) =>
-      @timer.on event, (args...) =>
-        Utils.callAll @modules, event, @interval, args...
-
-    { @Work, @ShortBreak, @LongBreak } = IntervalFactory @durations
+    @config = @_makeConfig(options)
+    @_loadModules()
+    { @Work, @ShortBreak, @LongBreak } = IntervalFactory @config.durations
 
   start: (args..., cb) ->
     @interval = new @Work { name: args[0] }
@@ -75,5 +59,28 @@ class Pomodoremi
   stop: (cb) ->
     @timer.stop()
     cb()
+
+  _makeConfig: (options = {}) ->
+    config = _.merge({}, DEFAULT_OPTIONS, options)
+    personalConfigLoad = ->
+      # if Utils.canRequire CONFIG_PATH
+        # require CONFIG_PATH
+      # else
+        # ->
+
+    personalConfigLoad.apply config
+    config
+
+  _loadModules: (modules) ->
+    commandsList = _(modules).pluck('commands').compact().value()
+    _.forEach commandsList, (commands) => _.merge(this, commands)
+
+    helpList = _(modules).pluck('help').compact().value()
+    _.forEach helpList, (help) => _.merge(@help, help)
+
+    _.forEach EVENTS, (event) =>
+      @timer.on event, (interval) =>
+        Utils.callAll modules, event, interval
+
 
 module.exports = Pomodoremi

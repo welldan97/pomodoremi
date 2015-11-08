@@ -17,14 +17,14 @@ class Timer
 
     @interval = interval
     @interval.startedAt = new Date()
-    @emit 'start'
+    @emit 'start', @interval
 
     @_schedule(interval)
 
   stop: ->
     return unless @interval?
     @interval.stoppedAt = new Date()
-    @emit 'stop', @interval.timePassed()
+    @emit 'stop', @interval
     @interval = undefined
 
   process: (interval) ->
@@ -33,12 +33,12 @@ class Timer
 
     @processed += 1
     if !@interval.isFinished()
-      @emit 'update', @interval.timePassed()
+      @emit 'update', @interval
     else if !@finishEmitted
-      @emit 'finish'
+      @emit 'finish', @interval
       @finishEmitted = true
     else
-      @emit 'overstay', @interval.timeOverstayed()
+      @emit 'overstay', @interval
 
     @_schedule(interval)
 
