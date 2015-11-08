@@ -8,15 +8,16 @@ Tags = require './modules/tags'
 Track = require './modules/track'
 CommandLineUI = require './modules/command-line-ui'
 Notifier = require './modules/notifier'
+Debug = require './modules/debug'
 
 Utils = require './utils'
 Timer = require './timer'
 Interval = require './interval'
 
 config =
-  if Utils.canRequire CONFIG_PATH
-    require CONFIG_PATH
-  else
+  # if Utils.canRequire CONFIG_PATH
+    # require CONFIG_PATH
+  # else
     ->
 
 class Pomodoremi
@@ -37,6 +38,7 @@ class Pomodoremi
       # new Tags
       # new CommandLineUI
       # new Notifier
+      new Debug
     ]
 
   constructor: (options = {}) ->
