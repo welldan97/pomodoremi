@@ -3,9 +3,9 @@ EventEmitter = require('events').EventEmitter
 Utils = require './utils'
 
 class Timer
-  ONE_MINUTE = Utils.toMs(1)
+  DEFAULT_PERIOD = Utils.toMs(1)
 
-  constructor: (@delay = ONE_MINUTE) ->
+  constructor: (@period = DEFAULT_PERIOD) ->
     @on = EventEmitter::on
     @emit = EventEmitter::emit
 
@@ -43,6 +43,6 @@ class Timer
     @_schedule(interval)
 
   _schedule: (interval) ->
-    setTimeout (=> @process(interval)), @delay
+    setTimeout (=> @process(interval)), @period
 
 module.exports = Timer

@@ -1,7 +1,7 @@
 Utils = require './utils'
 
 class Interval
-  constructor: (@type, { @name, @length, @startedAt, @stoppedAt }) ->
+  constructor: (@type, { @name, @duration, @startedAt, @stoppedAt }) ->
 
   startedAt: undefined
   stoppedAt: undefined
@@ -10,7 +10,7 @@ class Interval
     new Date - @startedAt
 
   timeOverstayed: ->
-    @timePassed() - @length
+    @timePassed() - @duration
 
   isFinished: ->
     @timeOverstayed() >= 0
