@@ -1,9 +1,7 @@
 Utils = require './utils'
 
 class Interval
-  constructor: (@type, options) ->
-    @name = options['name'] if options
-    @length = Interval.lengths[@type]
+  constructor: (@type, { @name, @length, @startedAt, @stoppedAt }) ->
 
   startedAt: undefined
   stoppedAt: undefined

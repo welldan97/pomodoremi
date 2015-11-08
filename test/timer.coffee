@@ -13,8 +13,7 @@ describe 'Timer', ->
     timer = new Timer(10)
     clock = sinon.useFakeTimers()
 
-    Interval.lengths = work: 100
-    interval = new Interval('work')
+    interval = new Interval('work', length: 100)
 
   afterEach ->
     clock.restore()
