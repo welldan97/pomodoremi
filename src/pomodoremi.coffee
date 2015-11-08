@@ -12,7 +12,7 @@ Debug = require './modules/debug'
 
 Utils = require './utils'
 Timer = require './timer'
-Interval = require './interval'
+IntervalFactory = require './interval-factory'
 
 config =
   # if Utils.canRequire CONFIG_PATH
@@ -55,19 +55,20 @@ class Pomodoremi
       @timer.on event, (args...) =>
         Utils.callAll @modules, event, @interval, args...
 
+    { @Work, @ShortBreak, @LongBreak } = IntervalFactory @durations
+
   start: (args..., cb) ->
-    name = args[0] ? 'Pomodoro'
-    @interval = new Interval({ name, type: 'work', duration: @durations['work'] })
+    @interval = new @Work { name: args[0] }
     @timer.start @interval
     cb()
 
   shortBreak: (cb) ->
-    @interval = new Interval(type: 'shortBreak', duration: @durations['shortBreak'])
+    @interval = new @ShortBreak
     @timer.start @interval
     cb()
 
   longBreak: (cb) ->
-    @interval = new Interval(type: 'longBreak', duration: @durations['longBreak'])
+    @interval = new @LongBreak
     @timer.start @interval
     cb()
 
