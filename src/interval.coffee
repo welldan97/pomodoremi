@@ -11,4 +11,7 @@ class Interval
   stop: ->
     @stoppedAt = new Date
 
+  timePassed: ->
+    new Date - @startedAt
+
 module.exports = Interval

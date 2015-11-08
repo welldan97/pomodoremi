@@ -29,3 +29,10 @@ describe 'Interval', ->
       interval = new Interval 'work'
       interval.stop()
       expect(interval.stoppedAt.getTime()).to.equal (new Date).getTime()
+
+  describe '#timePassed', ->
+    it 'counts time passed', ->
+      interval = new Interval 'work'
+      interval.start()
+      clock.tick 100
+      expect(interval.timePassed()).to.equal 100

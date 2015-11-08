@@ -1,6 +1,7 @@
 EventEmitter = require('events').EventEmitter
 
 Utils = require './utils'
+
 class Timer
   ONE_MINUTE = Utils.toMs(1)
 
@@ -8,16 +9,17 @@ class Timer
     @on = EventEmitter::on
     @emit = EventEmitter::emit
 
-  start: (interval) ->
-    @length = interval.length
-    @emit 'stop', @processed * @delay if @startedAt
+  start: (@interval) ->
+    @length = @interval.length
+    @interval.start()
+    @emit 'stop', @interval.timePassed() if @startedAt
     @processed = 0
     @startedAt = new Date()
     @emit 'start'
     @_schedule(@startedAt)
 
   stop: ->
-    @emit 'stop', @processed * @delay if @startedAt
+    @emit 'stop', @interval.timePassed() if @startedAt
 
     @startedAt = undefined
 
