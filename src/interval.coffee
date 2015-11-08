@@ -3,9 +3,6 @@ Utils = require './utils'
 class Interval
   constructor: (@type, { @name, @duration, @startedAt, @stoppedAt }) ->
 
-  startedAt: undefined
-  stoppedAt: undefined
-
   timePassed: ->
     new Date - @startedAt
 
