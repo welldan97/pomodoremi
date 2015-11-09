@@ -47,7 +47,7 @@ else if command == 'server'
   bridge = method:
     (name, args..., cb) ->
       pomodoremi[name](args..., cb)
-  dnode(bridge).listen PORT
+  dnode(bridge, weak: false).listen PORT
 else if _(pomodoremi).functions().include(command)
   client = dnode.connect(PORT)
   client.on 'remote', (remote) ->
