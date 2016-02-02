@@ -7,12 +7,12 @@ spawn = require('child_process').spawn
 gulp.task 'build', ->
   gulp.src(['src/**/*.coffee', '!./src/cli.coffee'])
     .pipe(coffee(bare: true))
-    .pipe gulp.dest('lib')
+    .pipe gulp.dest('dist')
 
   gulp.src('src/cli.coffee')
     .pipe(coffee(bare: true))
     .pipe(insert.prepend('#!/usr/bin/env node\n'))
-    .pipe gulp.dest('lib')
+    .pipe gulp.dest('dist')
 
 gulp.task 'test', ->
   mocha = spawn 'mocha', [
