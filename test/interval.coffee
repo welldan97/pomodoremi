@@ -10,6 +10,8 @@ describe 'Interval', ->
     clock = sinon.useFakeTimers()
     interval = new Interval duration: 777
 
+  afterEach ->
+    clock.restore()
   describe '#timePassed', ->
     it 'counts time passed', ->
       interval.startedAt = new Date()
