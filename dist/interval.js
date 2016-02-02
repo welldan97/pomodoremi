@@ -8,7 +8,7 @@ Interval = (function() {
   }
 
   Interval.prototype.timePassed = function() {
-    return new Date - this.startedAt;
+    return new Date() - this.startedAt;
   };
 
   Interval.prototype.timeOverstayed = function() {

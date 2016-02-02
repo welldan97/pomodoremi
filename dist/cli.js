@@ -32,7 +32,7 @@ command = cli.input[0];
 args = subCommands.concat(flags);
 
 if (command == null) {
-  header = "Usage:\n  pomodoremi <command> [args] [options]\n\nCommands:\n";
+  header = 'Usage:\n  pomodoremi <command> [args] [options]\n\nCommands:\n';
   commands = _.merge({}, pomodoremi.help, {
     server: function() {
       return ['server', 'starts server'];

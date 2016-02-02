@@ -1,17 +1,9 @@
-var CommandLineUI, IntervalFactory, Notifier, Pomodoremi, Tags, Timer, Utils, _, fs,
+var IntervalFactory, Pomodoremi, Timer, Utils, _, fs, setUpConfigs,
   slice = [].slice;
 
 fs = require('fs');
 
 _ = require('lodash');
-
-require('coffee-script/register');
-
-Tags = require('./modules/tags');
-
-CommandLineUI = require('./modules/command-line-ui');
-
-Notifier = require('./modules/notifier');
 
 Utils = require('./utils');
 
@@ -19,31 +11,24 @@ Timer = require('./timer');
 
 IntervalFactory = require('./interval-factory');
 
-Pomodoremi = (function() {
-  var DEFAULT_OPTIONS, EVENTS, PERSONAL_CONFIG_PATH, ref;
+setUpConfigs = require('./pomodoremi/set-up-configs');
 
-  PERSONAL_CONFIG_PATH = (ref = process.env.POMODOREMI_CONFIG_PATH) != null ? ref : process.env.HOME + "/.pomodoremi/config";
+console.log('hhhh');
+
+Pomodoremi = (function() {
+  var EVENTS;
 
   EVENTS = ['start', 'stop', 'update', 'finish', 'overstay'];
 
-  DEFAULT_OPTIONS = {
-    durations: {
-      work: Utils.toMs(25),
-      shortBreak: Utils.toMs(5),
-      longBreak: Utils.toMs(15)
-    },
-    modules: [new Tags, new CommandLineUI, new Notifier]
-  };
-
   function Pomodoremi(options) {
-    var ref1;
+    var ref;
     if (options == null) {
       options = {};
     }
     this.timer = new Timer();
-    this._applyConfig(options);
+    setUpConfigs(this, options);
     this._loadModules(this.modules);
-    ref1 = IntervalFactory(this.durations), this.Work = ref1.Work, this.ShortBreak = ref1.ShortBreak, this.LongBreak = ref1.LongBreak;
+    ref = IntervalFactory(this.durations), this.Work = ref.Work, this.ShortBreak = ref.ShortBreak, this.LongBreak = ref.LongBreak;
   }
 
   Pomodoremi.prototype.help = {
@@ -88,16 +73,6 @@ Pomodoremi = (function() {
   Pomodoremi.prototype.stop = function(cb) {
     this.timer.stop();
     return cb();
-  };
-
-  Pomodoremi.prototype._applyConfig = function(options) {
-    var personalConfigLoad;
-    if (options == null) {
-      options = {};
-    }
-    _.merge(this, DEFAULT_OPTIONS, options);
-    personalConfigLoad = Utils.canRequire(PERSONAL_CONFIG_PATH) ? require(PERSONAL_CONFIG_PATH) : (console.log('no personal config'), function() {});
-    return personalConfigLoad.apply(this);
   };
 
   Pomodoremi.prototype._loadModules = function(modules) {

@@ -12,8 +12,8 @@ CommandLineUI = (function() {
   DEFAULT_OPTIONS = [
     ':bar :status', {
       clear: true,
-      complete: "█",
-      incomplete: "░",
+      complete: '█',
+      incomplete: '░',
       width: 25,
       total: 100
     }
@@ -27,7 +27,7 @@ CommandLineUI = (function() {
 
   CommandLineUI.prototype.start = function(interval, cb) {
     if (!this.isSessionStarted) {
-      console.log("(" + (Utils.formatDate(new Date)) + ")");
+      console.log("(" + (Utils.formatDate(new Date())) + ")");
     }
     this.isSessionStarted = true;
     this.isSessionClosing = false;
@@ -91,7 +91,7 @@ CommandLineUI = (function() {
     if (this.isSessionClosing) {
       this.isSessionClosing = false;
       this.isSessionStarted = false;
-      return console.log("(" + (Utils.formatDate(new Date)) + ")\n");
+      return console.log("(" + (Utils.formatDate(new Date())) + ")\n");
     }
   };
 
