@@ -1,36 +1,18 @@
 fs = require 'fs'
 _ = require 'lodash'
-require 'coffee-script/register'
-
-Tags = require './modules/tags'
-CommandLineUI = require './modules/command-line-ui'
-Notifier = require './modules/notifier'
-# Debug = require './modules/debug'
 
 Utils = require './utils'
 Timer = require './timer'
 IntervalFactory = require './interval-factory'
 
-class Pomodoremi
-  PERSONAL_CONFIG_PATH = process.env.POMODOREMI_CONFIG_PATH ?
-    "#{process.env.HOME}/.pomodoremi/config"
-  EVENTS = ['start', 'stop', 'update', 'finish', 'overstay']
-  DEFAULT_OPTIONS =
-    durations:
-      work: Utils.toMs(25)
-      shortBreak: Utils.toMs(5)
-      longBreak: Utils.toMs(15)
+setUpConfigs = require './pomodoremi/set-up-configs'
 
-    modules: [
-      new Tags()
-      new CommandLineUI()
-      new Notifier()
-      # new Debug
-    ]
+class Pomodoremi
+  EVENTS = ['start', 'stop', 'update', 'finish', 'overstay']
 
   constructor: (options = {}) ->
     @timer = new Timer()
-    @_applyConfig(options)
+    setUpConfigs(this, options)
     @_loadModules(@modules)
     { @Work, @ShortBreak, @LongBreak } = IntervalFactory @durations
 
@@ -58,16 +40,6 @@ class Pomodoremi
   stop: (cb) ->
     @timer.stop()
     cb()
-
-  _applyConfig: (options = {}) ->
-    _.merge(this, DEFAULT_OPTIONS, options)
-    personalConfigLoad =
-      if Utils.canRequire PERSONAL_CONFIG_PATH
-        require PERSONAL_CONFIG_PATH
-      else
-        console.log 'no personal config'
-        ->
-    personalConfigLoad.apply this
 
   _loadModules: (modules) ->
     commandsList = _(modules).pluck('commands').compact().value()
