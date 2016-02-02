@@ -12,13 +12,13 @@ describe 'Interval', ->
 
   describe '#timePassed', ->
     it 'counts time passed', ->
-      interval.startedAt = new Date
+      interval.startedAt = new Date()
       clock.tick 100
       expect(interval.timePassed()).to.equal 100
 
   describe '#timeOverstayed', ->
     it 'counts time overstayed', ->
-      interval.startedAt = new Date
+      interval.startedAt = new Date()
       clock.tick 100
       expect(interval.timeOverstayed()).to.equal -677
 
@@ -30,7 +30,7 @@ describe 'Interval', ->
 
   describe '#isFinished', ->
     it 'returns true if it is already finished', ->
-      interval.startedAt = new Date
+      interval.startedAt = new Date()
       clock.tick 100
       expect(interval.isFinished()).to.equal false
 

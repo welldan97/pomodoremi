@@ -25,14 +25,19 @@ args = subCommands.concat flags
 
 if !command?
   header =
-  """
+  '''
     Usage:
       pomodoremi <command> [args] [options]
 
     Commands:
 
-  """
-  commands = _.merge({}, pomodoremi.help, server: -> ['server', 'starts server'])
+  '''
+  commands = _.merge(
+    {},
+    pomodoremi.help,
+    server: -> ['server', 'starts server']
+  )
+
   maxCommandLength = _(commands)
     .values()
     .map (fn) -> fn()[0].length

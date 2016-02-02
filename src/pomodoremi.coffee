@@ -22,9 +22,9 @@ class Pomodoremi
       longBreak: Utils.toMs(15)
 
     modules: [
-      new Tags
-      new CommandLineUI
-      new Notifier
+      new Tags()
+      new CommandLineUI()
+      new Notifier()
       # new Debug
     ]
 
@@ -77,7 +77,7 @@ class Pomodoremi
     _.forEach helpList, (help) => _.merge(@help, help)
 
     _.forEach EVENTS, (event) =>
-      @timer.on event, (interval) =>
+      @timer.on event, (interval) ->
         Utils.callAll modules, event, interval
 
 

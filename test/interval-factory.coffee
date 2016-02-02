@@ -17,7 +17,7 @@ describe 'IntervalFactory', ->
     work = undefined
 
     beforeEach ->
-      work = new Work(startedAt: new Date)
+      work = new Work(startedAt: new Date())
 
     it 'should be an ancessor of interval', ->
       expect(work.timePassed).to.exist
@@ -40,7 +40,7 @@ describe 'IntervalFactory', ->
     shortBreak = undefined
 
     beforeEach ->
-      shortBreak = new ShortBreak(startedAt: new Date)
+      shortBreak = new ShortBreak(startedAt: new Date())
 
     it 'should be an ancessor of interval', ->
       expect(shortBreak.timePassed).to.exist
@@ -56,7 +56,7 @@ describe 'IntervalFactory', ->
     shortBreak = undefined
 
     beforeEach ->
-      shortBreak = new ShortBreak(startedAt: new Date)
+      shortBreak = new ShortBreak(startedAt: new Date())
 
     it 'should be an ancessor of interval', ->
       expect(shortBreak.timePassed).to.exist

@@ -5,8 +5,8 @@ Progress = require 'progress'
 class CommandLineUI
   DEFAULT_OPTIONS = [':bar :status',
       clear: true
-      complete: "█"
-      incomplete: "░"
+      complete: '█'
+      incomplete: '░'
       width: 25
       total: 100
     ]
@@ -16,7 +16,7 @@ class CommandLineUI
     @isSessionClosing = false
 
   start: (interval, cb) ->
-    console.log("(#{Utils.formatDate(new Date)})") unless @isSessionStarted
+    console.log("(#{Utils.formatDate(new Date())})") unless @isSessionStarted
     @isSessionStarted = true
     @isSessionClosing = false
     switch interval.type
@@ -53,6 +53,6 @@ class CommandLineUI
     if @isSessionClosing
       @isSessionClosing = false
       @isSessionStarted = false
-      console.log("(#{Utils.formatDate(new Date)})\n")
+      console.log("(#{Utils.formatDate(new Date())})\n")
 
 module.exports = CommandLineUI

@@ -1,7 +1,7 @@
 _ = require 'lodash'
 Interval = require './interval'
 
-module.exports = ({ work, shortBreak, longBreak}) ->
+module.exports = ({ work, shortBreak, longBreak }) ->
   class Work extends Interval
     DEFAULT_OPTIONS =
       type: 'work'
@@ -10,6 +10,7 @@ module.exports = ({ work, shortBreak, longBreak}) ->
 
     constructor: (options) ->
       super _.merge {}, DEFAULT_OPTIONS, options
+
 
   class ShortBreak extends Interval
     DEFAULT_OPTIONS =
