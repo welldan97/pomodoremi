@@ -5,7 +5,7 @@ insert = require 'gulp-insert'
 spawn = require('child_process').spawn
 
 gulp.task 'build', ->
-  gulp.src(['src/**/*.coffee', '!./src/cli.coffee'])
+  gulp.src(['src/**/**/*.coffee', '!./src/cli.coffee'])
     .pipe(coffee(bare: true))
     .pipe gulp.dest('dist')
 
