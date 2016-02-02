@@ -13,8 +13,6 @@ IntervalFactory = require('./interval-factory');
 
 setUpConfigs = require('./pomodoremi/set-up-configs');
 
-console.log('hhhh');
-
 Pomodoremi = (function() {
   var EVENTS;
 
