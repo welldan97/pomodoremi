@@ -6,14 +6,13 @@ Timer = require './timer'
 IntervalFactory = require './interval-factory'
 
 setUpConfigs = require './pomodoremi/set-up-configs'
+setUpModules = require './pomodoremi/set-up-modules'
 
 class Pomodoremi
-  EVENTS = ['start', 'stop', 'update', 'finish', 'overstay']
-
   constructor: (options = {}) ->
     @timer = new Timer()
     setUpConfigs(this, options)
-    @_loadModules(@modules)
+    setUpModules(this, @mod)
     { @Work, @ShortBreak, @LongBreak } = IntervalFactory @durations
 
   help:
@@ -41,16 +40,6 @@ class Pomodoremi
     @timer.stop()
     cb()
 
-  _loadModules: (modules) ->
-    commandsList = _(modules).pluck('commands').compact().value()
-    _.forEach commandsList, (commands) => _.merge(this, commands)
-
-    helpList = _(modules).pluck('help').compact().value()
-    _.forEach helpList, (help) => _.merge(@help, help)
-
-    _.forEach EVENTS, (event) =>
-      @timer.on event, (interval) ->
-        Utils.callAll modules, event, interval
 
 
 module.exports = Pomodoremi
