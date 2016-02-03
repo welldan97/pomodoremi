@@ -12,7 +12,7 @@ class Pomodoremi
   constructor: (options = {}) ->
     @timer = new Timer()
     setUpConfigs(this, options)
-    setUpModules(this, @mod)
+    setUpModules(this, @modules)
     { @Work, @ShortBreak, @LongBreak } = IntervalFactory @durations
 
   help:
