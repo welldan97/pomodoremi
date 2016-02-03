@@ -9,8 +9,3 @@ describe 'Pomodoremi', ->
     pomodoremi = new Pomodoremi passed: true
 
   describe '#constructor', ->
-    it 'should set default options', ->
-      expect(pomodoremi.durations).to.exist
-
-    it 'should set passed options', ->
-      expect(pomodoremi.passed).to.exist
