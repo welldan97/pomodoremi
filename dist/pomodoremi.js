@@ -1,4 +1,4 @@
-var IntervalFactory, Pomodoremi, Timer, Utils, _, fs, setUpConfigs,
+var IntervalFactory, Pomodoremi, Timer, Utils, _, fs, setUpConfigs, setUpModules,
   slice = [].slice;
 
 fs = require('fs');
@@ -13,11 +13,9 @@ IntervalFactory = require('./interval-factory');
 
 setUpConfigs = require('./pomodoremi/set-up-configs');
 
+setUpModules = require('./pomodoremi/set-up-modules');
+
 Pomodoremi = (function() {
-  var EVENTS;
-
-  EVENTS = ['start', 'stop', 'update', 'finish', 'overstay'];
-
   function Pomodoremi(options) {
     var ref;
     if (options == null) {
@@ -25,7 +23,7 @@ Pomodoremi = (function() {
     }
     this.timer = new Timer();
     setUpConfigs(this, options);
-    this._loadModules(this.modules);
+    setUpModules(this, this.mod);
     ref = IntervalFactory(this.durations), this.Work = ref.Work, this.ShortBreak = ref.ShortBreak, this.LongBreak = ref.LongBreak;
   }
 
@@ -71,29 +69,6 @@ Pomodoremi = (function() {
   Pomodoremi.prototype.stop = function(cb) {
     this.timer.stop();
     return cb();
-  };
-
-  Pomodoremi.prototype._loadModules = function(modules) {
-    var commandsList, helpList;
-    commandsList = _(modules).pluck('commands').compact().value();
-    _.forEach(commandsList, (function(_this) {
-      return function(commands) {
-        return _.merge(_this, commands);
-      };
-    })(this));
-    helpList = _(modules).pluck('help').compact().value();
-    _.forEach(helpList, (function(_this) {
-      return function(help) {
-        return _.merge(_this.help, help);
-      };
-    })(this));
-    return _.forEach(EVENTS, (function(_this) {
-      return function(event) {
-        return _this.timer.on(event, function(interval) {
-          return Utils.callAll(modules, event, interval);
-        });
-      };
-    })(this));
   };
 
   return Pomodoremi;
