@@ -58,7 +58,7 @@ if (command == null) {
   dnode(bridge, {
     weak: false
   }).listen(PORT);
-} else if (_(pomodoremi).functions().include(command)) {
+} else if (_(pomodoremi).functionsIn().includes(command)) {
   client = dnode({}, {
     weak: false
   }).connect(PORT);

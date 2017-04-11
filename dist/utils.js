@@ -34,7 +34,7 @@ module.exports = {
     });
   },
   canRequire: function(module) {
-    var e, error;
+    var e;
     try {
       require.resolve(module);
       return true;

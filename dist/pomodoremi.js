@@ -23,7 +23,7 @@ Pomodoremi = (function() {
     }
     this.timer = new Timer();
     setUpConfigs(this, options);
-    setUpModules(this, this.mod);
+    setUpModules(this, this.modules);
     ref = IntervalFactory(this.durations), this.Work = ref.Work, this.ShortBreak = ref.ShortBreak, this.LongBreak = ref.LongBreak;
   }
 

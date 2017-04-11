@@ -8,11 +8,11 @@ EVENTS = ['start', 'stop', 'update', 'finish', 'overstay'];
 
 setUpModules = function(pomodoremi, modules) {
   var commandsList, helpList;
-  commandsList = _(modules).pluck('commands').compact().value();
+  commandsList = _(modules).map('commands').compact().value();
   _.forEach(commandsList, function(commands) {
     return _.merge(pomodoremi, commands);
   });
-  helpList = _(modules).pluck('help').compact().value();
+  helpList = _(modules).map('help').compact().value();
   _.forEach(helpList, function(help) {
     return _.merge(pomodoremi.help, help);
   });

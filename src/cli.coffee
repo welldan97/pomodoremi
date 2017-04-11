@@ -53,7 +53,7 @@ else if command == 'server'
     (name, args..., cb) ->
       pomodoremi[name](args..., cb)
   dnode(bridge, weak: false).listen PORT
-else if _(pomodoremi).functions().include(command)
+else if _(pomodoremi).functionsIn().includes(command)
   client = dnode({}, weak: false).connect(PORT)
   client.on 'remote', (remote) ->
     remote.method command, args..., (result) ->
